@@ -16,5 +16,21 @@
     
     %title="Nchan - flexible pub/sub server for the modern web."
   
-  %body=yield
-    
+  %body
+    .header
+      %img.logo(src='/img/nchan_logo.png' alt="Nchan logo")
+      .nginx
+        %img.nginx(src='/img/powered_by_nginx.png' alt="Powered by nginx")
+      %ul.navigation
+        %li
+          %a(href="#about")="about"
+        %li
+          %a(href="#download")="download"
+        %li
+          %a(href="#install")="install"
+        %li
+          %a(href="#configure")="configure"
+        %li
+          %a(href="#examples")="examples"
+      
+    .page=yield

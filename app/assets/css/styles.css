@@ -1,0 +1,270 @@
+body {
+  top:0;
+  left: 0;
+}
+
+.header {
+  width:100%;
+  position: relative;
+  height:250px;
+  overflow: visible;
+}
+
+.header img.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.header div.nginx {
+  position: absolute;
+  top:20px;
+  right: 0;
+}
+
+.header ul.navigation {
+  padding: 0;
+  position: relative;
+  top: 180px;
+  overflow: hidden;
+  list-style:none;
+  padding:0;
+  margin:0;
+  margin-left: 230px;
+}
+
+.intrigue {
+  font-style: italic;
+  font-size: 1.4em;
+}
+img {
+  border:0;
+}
+h1, h2 {
+  color: black;
+  padding:0;
+  margin-left:125px;
+  margin-top:20px;
+  margin-bottom:0;
+}
+h2 {
+  font-size:0.8em;
+  font-weight:normal;
+  margin:1em 0 0 180px;
+}
+
+h3 {
+  font-size: 1.4em;
+  color: #009974;
+  background: url('/img/line.png') bottom right no-repeat;
+  padding:0;
+  margin-bottom:0.3em;
+  margin-top:1.2em;
+}
+
+h3 a {
+  text-decoration: none;
+  position:relative;
+  top:-1px;
+  padding:0 0.25em 0 0.25em;
+}
+
+h4 {
+  font-size:1.2em;
+  margin-left:0.3em;
+}
+
+h5 {
+  font-size: 1em;
+  margin-left: 1em;
+}
+
+p {
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+}
+
+.filler {
+  color: #ccc;
+}
+
+.nginx {
+  font-family: sans-serif;
+  text-decoration: none;
+  color:#090;
+}
+
+a { color:#009974; }
+a:hover{ background:#EFE; }
+a:active{ color:#0a0; }
+
+ul.navigation li {
+  float: left;
+  margin:0 0.25em 0 0.25em;
+  padding-bottom:0.5em;
+}
+ul.navigation a {
+  font-size:1.4em;
+  padding:0.2em;
+}
+
+a.github{
+  color:black;
+}
+
+dl.checksum {
+  color: #777;
+  margin-top:0;
+  margin-left:1em;
+  text-align:left;
+  font-family: monospace;
+  font-size: 90%;
+}
+dl.checksum dt {
+  clear: both;
+  float:left;
+  width: 4em;
+}
+div.info {
+  /*display: none;*/
+}
+
+div.header {
+  margin-right:210px;
+  position:relative;
+  z-index:10;
+}
+
+div.everywhere {
+  position:relative; 
+  margin:2em 235px 10px 0.8em;
+  overflow:auto;
+}
+
+code, pre {
+  border: 2px solid #ddd;
+  background: #eee;
+}
+code.codeblock {
+  display: block;
+}
+
+
+div.variable, div.directive {
+  margin:2em;
+  padding:0.3em;
+  padding-left:0.6em;
+  background: #FFFEF4;
+}
+
+.directive a.name, .variable a.name, a.variable, a.directive {
+  font-weight:bold;
+  font-family: monospace;
+} 
+.directive .value, .variable a.name {
+  font-family: monospace;
+}
+.directive .type {
+  font-family: serif;
+  font-style: italic;
+}
+
+div.beg {
+  position: fixed;
+  z-index: 0;
+  top:19em;
+  right:5px;
+  width: 14em;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+}
+.beg .newmoney{
+  font-size: 10px;
+  font-family: monospace;
+  padding-bottom: 1em;
+}
+div.beg img {
+  border:0;
+}
+
+div.chat {
+  position:fixed;
+  z-index:0;
+  right:0.3em;
+  top:0.3em;
+  height:17em;
+  border:3px solid #ddd;
+  background: #f6f6ff;
+  text-align:left;
+  font-family: sans-serif;
+  width:220px;
+}
+
+.chat ul {
+  overflow:auto;
+  height:16em;
+  list-style: none;
+  padding:0.1em;
+  margin:0.1em;
+  font-size:95%;
+  border:1px solid #DDD;
+  background: #Fcfcfc;
+}
+
+.chat li {
+  margin-bottom:0.2em;
+}
+
+.chat li.notice {
+  color:#666;
+  padding-left:0.1em;
+}
+.chat li.message {
+  color: black;
+}
+.chat li.iSay {
+  color: #0002AF;
+}
+.chat form {
+  white-space: nowrap;
+  font-size:70%;
+  text-align:right;
+  margin:0 0.2em 0 0.2em;
+}
+.chat input {
+  font-size:100%;
+}
+.chat input.submit {
+  display:none;
+}
+.chat input.message {
+  margin:0;
+  color:#0002AF;
+  border:2px solid #DDD;
+  width:12.5em;
+  
+}
+.chat input.username {
+  float:left;
+  display:inline;
+  border:0;
+  width:5em;
+  margin-left:0.1em;
+  background: transparent;
+  color:#0002AF;
+}
+
+img.someone {
+  border:1px solid #A4AFAE;
+  float:left;
+  margin-right:0.5em;
+  padding:0.2em;
+}
+.footer {
+  margin-top:1em;
+  padding: 0.5em;
+  background: #eee;
+  clear: both;
+  text-align: center;
+}

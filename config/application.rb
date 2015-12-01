@@ -23,15 +23,10 @@ module Nchapp
     Queris.add_redis Redis.new(url: conf["redis_url"])
     #Queris.log_stats_per_request!
     
-    #initialize queris client
-    sprunger_client = Sprunger::Client.new(conf["beanstalk_server"])
-    
     use Rack::Config do |env|
       all_conf[ENV['RACK_ENV'].to_s].each do |cf, val|
         env[cf.to_sym]=val
       end
-      
-      env[:sprunger]=sprunger_client
     end
     
     (Dir['config/initializers/**/*.rb'] + 
@@ -47,7 +42,6 @@ module Nchapp
     use Rack::Session::Redis
     # must be used after Rack::Session::Cookie
     use Rack::Protection, except: :http_origin
-    
     
     #static resources
     use Rack::Static, root: 'app/assets/', urls: ['/js', '/css', '/img']
