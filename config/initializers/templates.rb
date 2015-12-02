@@ -1,5 +1,8 @@
 require 'tilt/haml'
 require 'tilt/erubis'
+require "haml"
+
+Haml::Options.defaults[:ugly] = true
 
 module Nchapp
   class Application < Hobbit::Base 
