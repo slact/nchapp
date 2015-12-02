@@ -42,4 +42,8 @@ class Nchapp::ApplicationController < Nchapp::Application
   def param(name)
     params[name]
   end
+  
+  def nchan_dir
+    "gitdir/nchan"
+  end
 end

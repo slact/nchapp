@@ -33,6 +33,18 @@ body {
   margin-left: 230px;
 }
 
+.page img.logo {
+  display: none;
+}
+
+a { color:#009974; }
+a:hover{ background:#EFE; }
+a:active{ color:#0a0; }
+
+
+
+
+
 .intrigue {
   font-style: italic;
   font-size: 1.4em;
@@ -88,15 +100,7 @@ p {
   color: #ccc;
 }
 
-.nginx {
-  font-family: sans-serif;
-  text-decoration: none;
-  color:#090;
-}
 
-a { color:#009974; }
-a:hover{ background:#EFE; }
-a:active{ color:#0a0; }
 
 ul.navigation li {
   float: left;
@@ -144,9 +148,15 @@ div.everywhere {
 code, pre {
   border: 2px solid #ddd;
   background: #eee;
+  margin:0;
+  padding:0;
+  text-indent: 0;
 }
-code.codeblock {
-  display: block;
+
+pre code {
+  border: 0;
+  margin:0;
+  padding:0;
 }
 
 

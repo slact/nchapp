@@ -7,6 +7,8 @@ gem 'syro'
 
 gem 'scrypt'
 
+gem 'redcarpet'
+
 #rack stuff
 gem 'warden'
 gem 'rack-contrib'
