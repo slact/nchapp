@@ -11,6 +11,9 @@ def check_nchan
     init_nchan_git_repo
     check_nchan
   end
+  
+  g.pull
+  
 end
   
 check_nchan
