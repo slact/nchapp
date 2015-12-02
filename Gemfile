@@ -10,6 +10,7 @@ gem 'scrypt'
 gem 'redcarpet'
 gem 'pygments.rb'
 
+gem 'git'
 
 #rack stuff
 gem 'warden'

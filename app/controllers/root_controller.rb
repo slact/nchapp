@@ -1,5 +1,9 @@
 class Nchapp::RootController < Nchapp::ApplicationController
   get '/' do
+    response.redirect '/readme'
+  end
+  
+  get '/readme' do
     render 'README'
   end
   

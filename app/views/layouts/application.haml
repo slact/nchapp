@@ -25,19 +25,19 @@
           %img.nginx(src='/img/powered_by_nginx.png' alt="Powered by nginx")
       %ul.navigation
         %li
-          %a(href="#about")="about"
+          %a(href="/readme#page")="about"
         %li
-          %a(href="#download")="download"
+          %a(href="/readme#download")="download"
         %li
-          %a(href="#install")="install"
+          %a(href="/readme#install")="install"
         %li
-          %a(href="upgrade")="upgrade"
+          %a(href="/readme#upgrade")="upgrade"
         %li
-          %a(href="#configure")="configure"
+          %a(href="/readme#configuration-directives")="configure"
 
         %li
           %a(href="#examples")="examples"
         %li
           %a.github(href="https://github.com/slact/nchan")="github"
       
-    .page=yield
+    #page.page=yield
