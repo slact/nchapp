@@ -8,6 +8,8 @@ gem 'syro'
 gem 'scrypt'
 
 gem 'redcarpet'
+gem 'pygments.rb'
+
 
 #rack stuff
 gem 'warden'

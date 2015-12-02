@@ -13,6 +13,7 @@
     %script(type="text/javascript" src="/js/common.js")
     
     %link(rel="stylesheet" type="text/css" href="/css/styles.css")
+    %link(rel="stylesheet" type="text/css" href="/pygments.css")
     
     %title="Nchan - flexible pub/sub server for the modern web."
   
@@ -20,7 +21,8 @@
     .header
       %img.logo(src='/img/nchan_logo.png' alt="Nchan logo")
       .nginx
-        %img.nginx(src='/img/powered_by_nginx.png' alt="Powered by nginx")
+        %a(href="https://nginx.org")
+          %img.nginx(src='/img/powered_by_nginx.png' alt="Powered by nginx")
       %ul.navigation
         %li
           %a(href="#about")="about"
@@ -36,6 +38,6 @@
         %li
           %a(href="#examples")="examples"
         %li
-          %a.github(href="#github")="github"
+          %a.github(href="https://github.com/slact/nchan")="github"
       
     .page=yield
