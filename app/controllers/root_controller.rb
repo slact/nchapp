@@ -7,6 +7,10 @@ class Nchapp::RootController < Nchapp::ApplicationController
     render 'README'
   end
   
+  get '/upgrade' do
+    render 'upgrade'
+  end
+  
   get '/pygments.css' do
     set_content_type "text/css"
     Pygments.css
