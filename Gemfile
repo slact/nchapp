@@ -38,6 +38,12 @@ gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 gem 'queris', :github => "slact/queris"
 
 gem 'hobbit', github: 'slact/hobbit'
+#if File.directory?(queris_path= File.expand_path("../hobbit"))
+#  gem 'hobbit', :path => queris_path
+#else
+#  gem 'hobbit', github: 'slact/hobbit'
+#end
+
 gem 'hobbit-contrib', github: 'slact/hobbit-contrib', require: 'hobbit/contrib'
 gem 'i18n'
 gem 'rack-protection'

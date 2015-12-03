@@ -12,4 +12,10 @@ class Nchapp::RootController < Nchapp::ApplicationController
     Pygments.css
   end
   
+  #404
+  any /.*/, [:get, :post, :put, :delete] do
+    response.status = 404
+    render '404'
+  end
+  
 end

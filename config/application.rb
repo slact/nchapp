@@ -45,6 +45,9 @@ module Nchapp
     
     #static resources
     use Rack::Static, root: 'app/assets/', urls: ['/js', '/css', '/img']
+    
+    #packages
+    use Rack::Static, root: 'gitdir/nchan/dev/package/', urls: ['/pkgs']
   end
 end
 
