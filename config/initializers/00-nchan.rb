@@ -22,6 +22,3 @@ root_dir = Dir.pwd
 
 #generate readme
 system "gitdir/nchan/dev/redocument.rb gitdir/nchan/ #{root_dir}/app/views/README.md"
-
-#prepare build
-system "gitdir/nchan/dev/package/repackage.sh"
