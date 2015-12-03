@@ -15,6 +15,10 @@ class Nchapp::RootController < Nchapp::ApplicationController
     render 'changelog'
   end
   
+  get '/examples' do
+    render 'examples'
+  end
+  
   get '/pygments.css' do
     set_content_type "text/css"
     Pygments.css
