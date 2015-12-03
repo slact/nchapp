@@ -2,9 +2,6 @@ require "git"
 
 def init_nchan_git_repo
   Git.clone("https://github.com/slact/nchan.git", 'nchan', :path => "gitdir")
-  Dir.chdir "gitdir/nchan" do
-    system "git submodule init"
-  end
 end
 
 def check_nchan
@@ -17,9 +14,6 @@ def check_nchan
   end
   
   g.pull
-  Dir.chdir "gitdir/nchan" do
-    system "git submodule update"
-  end
 end
   
 check_nchan
