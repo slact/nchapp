@@ -11,6 +11,7 @@ gem 'redcarpet'
 gem 'pygments.rb'
 
 gem 'git'
+gem 'fpm', :github => "slact/fpm"
 
 #rack stuff
 gem 'warden'
@@ -34,11 +35,7 @@ gem "redd"
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 
-if File.directory?(queris_path= File.expand_path("../queris"))
-  gem 'queris', :path => queris_path
-else
-  gem 'queris', :github => "slact/queris"
-end   
+gem 'queris', :github => "slact/queris"
 
 gem 'hobbit', github: 'slact/hobbit'
 gem 'hobbit-contrib', github: 'slact/hobbit-contrib', require: 'hobbit/contrib'
