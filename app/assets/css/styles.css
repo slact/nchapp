@@ -41,18 +41,6 @@ body {
   display: none;
 }
 
-a { color:#009974; }
-a:hover{ background:#EFE; }
-a:active{ color:#0a0; }
-
-
-
-
-
-.intrigue {
-  font-style: italic;
-  font-size: 1.4em;
-}
 img {
   border:0;
 }
@@ -67,24 +55,79 @@ h1, h2, h3, h4, h5 {
 
 h1 {
   background-position: 100% 100%;
+  font-size: 23px;
 }
 h2 {
   background-position: 110% 100%;
+  font-size: 20px;
 }
 h3{
   background-position: 130% 100%;
+  font-size: 18px;
 }
 h4{
   background-position: 150% 100%;
+  font-size: 16px;
 }
 h5{
   background-position: 170% 100%;
+  font-size: 14px;
 }
 
 p {
   margin-top:0.5em;
   margin-bottom:0.5em;
 }
+
+a { color:#009974; }
+a:hover{ background:#EFE; }
+a:active{ color:#0a0; }
+
+
+
+#configuration-directives + ul {
+  padding-left: 10px;
+  list-style: none;
+}
+
+#configuration-directives + ul li {
+  background-color: #f0f5ff;
+  margin: 5px 10px 10px 0; 
+  padding: 7px;
+}
+
+#configuration-directives + ul li .description {
+  color: #474;
+}
+
+#configuration-directives + ul li a.directive {
+  font-weight:bold;
+  color: #454;
+  font-size: 120%;
+  font-family: monospace;
+} 
+
+#configuration-directives + ul li .type {
+  font-family: serif;
+  font-style: italic;
+}
+
+#configuration-directives + ul li p {
+  margin: 0;
+  padding:0;
+  padding-bottom: 5px;
+}
+#configuration-directives + ul li blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+
+.intrigue {
+  font-style: italic;
+  font-size: 1.4em;
+}
+
 
 .filler {
   color: #ccc;
@@ -150,24 +193,7 @@ pre code {
 }
 
 
-div.variable, div.directive {
-  margin:2em;
-  padding:0.3em;
-  padding-left:0.6em;
-  background: #FFFEF4;
-}
 
-.directive a.name, .variable a.name, a.variable, a.directive {
-  font-weight:bold;
-  font-family: monospace;
-} 
-.directive .value, .variable a.name {
-  font-family: monospace;
-}
-.directive .type {
-  font-family: serif;
-  font-style: italic;
-}
 
 div.beg {
   position: fixed;
