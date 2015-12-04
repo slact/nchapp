@@ -1,4 +1,5 @@
 require "git"
+require "pygments"
 
 def init_nchan_git_repo
   Git.clone("https://github.com/slact/nchan.git", 'nchan', :path => "gitdir")
