@@ -19,11 +19,6 @@ class Nchapp::RootController < Nchapp::ApplicationController
     render 'examples'
   end
   
-  get '/pygments.css' do
-    set_content_type "text/css"
-    Pygments.css
-  end
-  
   #404
   any /.*/, [:get, :post, :put, :delete] do
     response.status = 404
