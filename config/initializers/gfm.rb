@@ -25,5 +25,5 @@ module Tilt
   end
 end
 
-
+Tilt.register Tilt::GithubFlavoredMarkdownTemplate, 'markdown'
 Tilt.register Tilt::GithubFlavoredMarkdownTemplate, 'md'

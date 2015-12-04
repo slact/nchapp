@@ -56,6 +56,19 @@ body {
   border: 0px solid blue;
 }
 
+ul.navigation li {
+  float: left;
+  margin:0 0.25em 0 0.25em;
+  padding-bottom:0.5em;
+}
+ul.navigation a {
+  font-size:1.4em;
+  padding:0.2em;
+}
+a.github{
+  color:black;
+}
+
 .page img.logo {
   display: none;
 }
@@ -142,6 +155,69 @@ a:active{ color:#0a0; }
 }
 
 
+code, pre {
+  border: 2px solid #ddd;
+  background: #eee;
+  margin:0;
+  padding:0;
+  text-indent: 0;
+}
+
+pre code {
+  border: 0;
+  margin:0;
+  padding:0;
+}
+
+
+div.upgrade img {
+  display: block;
+  margin: auto;
+  padding: auto;
+}
+
+
+table.differences {
+  border: 1px solid #555;
+}
+
+table.differences td, table.differences th {
+  border: 1px solid #888;
+}
+
+table.differences th {
+  background-color: #ededed;
+}
+
+table.differences .pushmodule {
+  background-color: #e6ffe6;
+}
+table.differences th.pushmodule {
+  background-color: #aaf2aa;
+}
+
+table.differences .nchan {
+  background-color: #e6fff8;
+}
+table.differences th.nchan {
+  background-color: #aaf2de;
+}
+
+p.footnote {
+  color: #222;
+  font-size: 80%;
+}
+
+
+
+
+
+
+
+
+
+
+
 .intrigue {
   font-style: italic;
   font-size: 1.4em;
@@ -154,19 +230,8 @@ a:active{ color:#0a0; }
 
 
 
-ul.navigation li {
-  float: left;
-  margin:0 0.25em 0 0.25em;
-  padding-bottom:0.5em;
-}
-ul.navigation a {
-  font-size:1.4em;
-  padding:0.2em;
-}
 
-a.github{
-  color:black;
-}
+
 
 dl.checksum {
   color: #777;
@@ -196,35 +261,6 @@ div.everywhere {
   margin:2em 235px 10px 0.8em;
   overflow:auto;
 }
-
-code, pre {
-  border: 2px solid #ddd;
-  background: #eee;
-  margin:0;
-  padding:0;
-  text-indent: 0;
-}
-
-pre code {
-  border: 0;
-  margin:0;
-  padding:0;
-}
-
-
-div.upgrade img {
-  display: block;
-  margin: auto;
-  padding: auto;
-}
-
-
-
-
-
-
-
-
 div.beg {
   position: fixed;
   z-index: 0;

@@ -1,0 +1,190 @@
+%h1="Upgrading"
+
+.upgrade
+  %img(src="/img/upgrade.png" alt="upgrade")
+
+:markdown
+  Nchan came out of a complete refactoring of the 
+  [Nginx HTTP Push Module](https://pushmodule.slact.net)
+  codebase. Many features have been added, but a select few have also been removed:
+  
+%table.differences
+  %tr
+    %th=""
+    %th.pushmodule="Push Module"
+    %th.nchan="Nchan"
+  %tr
+    %th="Storage Engine"
+    %td.pushmodule
+      Shared Memory
+    %td.nchan
+      Shared Memory, Redis (with local shared-memory cache)
+  %tr
+    %th="Concurrency Model"
+    %td.pushmodule
+      One shared-access mutex. Workers cannot access shared memory while another is holding the mutex lock, and the event loop is blocked while waiting for the mutex.
+    %td.nchan
+      No mutexes or blocking locks used. Each nginx worker is responsible for a shard of the channel id space. Workers communicate with each other via unix pipes sending 60-byte messages containing pointers to shared memory and metadata. The event loop is never blocked, and workers are always available to handle connections.
+  %tr
+    %th="Horizontal Scaling"
+    %td.pushmodule="No built-in features to scale across multiple Nginx instances."
+    %td.nchan="Can be quickly scaled up horizontally across Nginx instances using Redis."
+  %tr
+    %th="Subscribers"
+    %td.pushmodule
+      Long-Poll, Interval-Poll
+    %td.nchan
+      Websocket, EventSource, Long-Poll, Interval-Poll
+  %tr
+    %th="Publishers"
+    %td.pushmodule="HTTP"
+    %td.nchan="HTTP, Websocket"
+  %tr
+    %th="Channel Multiplexing"
+    %td.pushmodule="none"
+    %td.nchan="Up to 4 channels per subscriber location"
+  %tr
+    %th="Data Persistence"
+    %td.pushmodule
+      Persistent across nginx reloads (via SIGHUP). No persistence after nginx shutdown
+    %td.nchan
+      No persistence without Redis.
+      %sup
+        %a.footnote(href="#persist-future-feature")="*"
+      With Redis, data persists across reloads and after shutdown.
+      
+      %p#persist-future-feature.footnote
+        * - In-memory persistence across reloads without redis may be implemented in the future. If you want this feature, let me know.
+  %tr
+    %th="Metadata and Debugging Support"
+    %td.pushmodule
+      :markdown
+        - Channel info for Publisher endpoint requests.
+    %td.nchan
+      :markdown
+        - Channel info for Publisher endpoint requests
+        - Channel event metachannels with configurable event message strings.
+  
+  %tr
+    %th="Channel Security"
+    %td.pushmodule
+      :markdown
+        - Hiding channel URL via `X-Accel-Redirect`
+        - Disallow new channel creation by subscribers
+    %td.nchan
+      :markdown
+        - Hiding channel URL via `X-Accel-Redirect`
+        - Disallow new channel creation by subscribers
+        - Upstream callback URL for subscriber authorization
+  
+  %tr
+    %th="Subscriber Concurrency"
+    %td.pushmodule
+      :markdown
+        Broadcast, First-In, Last-In. The latter two only allow one subscriber per channel, kicking out either the newest or oldest subscribers.
+    %td.nchan
+      :markdown
+        Broadcast concurrency only. First-In can be replicated with 
+        `nchan_max_channel_subscribers 1;` . Last-In no longer supported.
+
+%h2="Configuration Changes"
+%p
+  :markdown
+    The main change is that all configuration directives have been renamed from `push_*` to `nchan_*`. However, 
+    **all [Push Module](https://pushmodule.slact.net) configuration directives) are still recognized**. Chances
+    , although a few of the very rarely used ones are now ignored. **You can run Nchan with your old Push Module configuration unchanged**, but it's recommended that you update it.
+  
+%ul
+  %li
+    :markdown
+      The Channel ID can now be set with a config directive, `nchan_channel_id` (or `nchan_publisher_channel_id` and `nchan_subscriber_channel_id`). The old method of setting the channel id variable `$push_channel_id` is still supported:
+    
+    %table.differences
+      %tr
+        %th.pushmodule="Push Module"
+        %th.nchan="Nchan"
+      %tr
+        %td.pushmodule
+          :markdown
+            ```nginx
+              #the old, lame, Push Module way
+              location ... {
+                set $push_channel_id $foobar;
+                #...
+              }
+            ```
+        %td.nchan
+          :markdown
+            ```nginx
+              #the new, super-cool, Nchan way
+              location ... {
+                nchan_channel_id $foobar;
+              }
+            ```
+    
+  %li
+    :markdown
+      `push_min_message_buffer_length` has been removed. The presence of this setting is tolerated but will be ignored.  
+      This setting preserved a given number of messages per channel regardless of message expiration configuration. I removed this because it complicated the message buffer configuration, and I have not seen any use of this option in the wild. If you really want this option back, let me know.
+    
+  %li
+    :markdown
+      `push_subscriber_concurrency` has been removed, and always assumed to be "broadcast". The presence of this setting is tolerated but will be ignored.
+      
+    %table.differences
+      %tr
+        %th="Concurrency"
+        %th.pushmodule="Push Module"
+        %th.nchan="Nchan"
+      %tr
+        %th="broadcast"
+        %td.pushmodule
+          :markdown
+            ```nginx
+              location ... {
+                push_subscriber_concurrency broadcast;
+                #...
+              }
+            ```
+        %td.nchan
+          :markdown
+            ```nginx
+              location ... {
+                #broadcast by default
+                #...
+              }
+            ```
+      %tr
+        %th="first-in"
+        %td.pushmodule
+          :markdown
+            ```nginx
+              location ... {
+                push_subscriber_concurrency first-in;
+                #...
+              }
+            ```
+        %td.nchan
+          :markdown
+            ```nginx
+              location ... {
+                nchan_max_channel_subscribers 1;
+                #...
+              }
+            ```
+      %tr
+        %th="last-in"
+        %td.pushmodule
+          :markdown
+            ```nginx
+              location ... {
+                push_subscriber_concurrency last-in;
+                #...
+              }
+            ```
+        %td.nchan
+          Not supported
+  %li
+    :markdown
+      `push_authorized_channels_only` is now `nchan_subscribe_existing_channels_only`
+    
