@@ -22,3 +22,6 @@ root_dir = Dir.pwd
 
 #generate readme
 system "gitdir/nchan/dev/redocument.rb gitdir/nchan/ #{root_dir}/app/views/README.md"
+
+#generate pygments css
+File.write("app/assets/css/pygments.css", Pygments.css)
