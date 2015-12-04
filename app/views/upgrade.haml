@@ -20,11 +20,11 @@
     %td.nchan
       Shared Memory, Redis (with local shared-memory cache)
   %tr
-    %th="Concurrency Model"
+    %th="Internal Concurrency Model"
     %td.pushmodule
       One shared-access mutex. Workers cannot access shared memory while another is holding the mutex lock, and the event loop is blocked while waiting for the mutex.
     %td.nchan
-      No mutexes or blocking locks used. Each nginx worker is responsible for a shard of the channel id space. Workers communicate with each other via unix pipes sending 60-byte messages containing pointers to shared memory and metadata. The event loop is never blocked, and workers are always available to handle connections.
+      No mutexes or blocking locks used. Each nginx worker is responsible for a shard of the channel id space. Workers communicate with each other via unix pipes (sockets) sending roughly 60-byte messages containing pointers to shared memory and metadata. The event loop is never blocked, and workers are always available to handle connections.
   %tr
     %th="Horizontal Scaling"
     %td.pushmodule="No built-in features to scale across multiple Nginx instances."
