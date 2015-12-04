@@ -13,8 +13,8 @@ def check_nchan
     g = Git.open("gitdir/nchan")
     check_nchan
   end
-  
-  g.pull
+  puts g.reset_hard
+  puts g.pull
 end
   
 check_nchan
