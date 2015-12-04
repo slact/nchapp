@@ -15,8 +15,8 @@ class Nchapp::RootController < Nchapp::ApplicationController
     render 'changelog'
   end
   
-  get '/examples' do
-    render 'examples'
+  get '/details' do
+    render 'details'
   end
   
   #404
