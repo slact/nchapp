@@ -1,0 +1,74 @@
+%h1="Details"
+%p
+  While Nchan is designed to be straightforward to configure and use, it has its quirks. Some are the result of being a module to a general-purpose web server, some are features that have not yet been implemented, and yet others are made to expose an extra layer of features for the braver developer.
+
+%a#publisher-endpoint-configs(href="#publisher-endpoint-configs")
+  %h2="Publisher Endpoints, Locations, and Configurations"
+
+:markdown
+  *A channel's configuration is set to the that of its last-used publishing location.*
+
+  Recall that Nchan configuration maps server *locations* to channel publisher and subscriber *endpoints*. Most of the time, you'll want just one publisher and one subscriber endpoint per channel. But what if differently configured publisher endpoints map to the same channel?
+  
+  Let's say you have the following configuration:
+
+  ```nginx
+    location = /pub/nobuffer {
+      nchan_publisher;
+      nchan_chanel_id foo;
+      nchan_store_messages off;
+    }
+    
+    location = /pub/bigbuffer {
+      nchan_publisher;
+      nchan_chanel_id foo;
+      nchan_message_buffer_length 30;
+    }
+    
+    location = /sub/weird_settings {
+      nchan_subscriber;
+      nchan_chanel_id foo;
+    }
+  ``` 
+
+  What happens if you publish to the channel `foo` from different locations, say, first through `POST /pub/bigbuffer`, then `POST /pub/nobuffer`?  
+  All messages published before the `POST /pub/nobuffer` will be deleted, because the request to `/pub/nobuffer` will have disabled the channel `foo`'s message buffer.  
+  
+  Publishing to `/pub/bigbuffer` will again restore message storage (up to 30 messages), as this will apply that location's config to the channel `foo`.
+  
+  This applies to all publishing-related configuration settings, which at present are  
+  - `nchan_message_buffer_length`
+  - `nchan_message_timeout`
+  - `nchan_use_redis`
+  
+  So, if you want a channel to behave consistently, and want to publish to it from multiple locations, *make sure those locations have the same configuration*.
+  
+  You can also can use differently-configured publisher locations to dynamically update a channel's message retention settings. This can be used to erase messages or to scale an existing channel's message retention as desired.
+
+
+%a#channel-ids(href="#channel-ids")
+  %h2="Channel IDs"
+:markdown
+  - high-entropy channel ids
+  - different location configurations
+  - multi-channel use cases
+
+%a#securing-channels(href="#securing-channels")
+  %h2="Securing Channels"
+:markdown
+  - `nchan_subscribe_existing_channels_only`
+  - `nchan_authorize_request`
+  - Using `X-Accel-Redirect`
+
+%a#websocket(href="#websocket")
+  %h2="Websocket"
+:markdown
+  - unsupported features
+
+%a#using-redis(href="#using-redis")
+  %h2="Using Redis"
+:markdown
+  - benefits
+  - drawbacks
+  - horizontal scaling across many nginx instances
+  - future cluster support
