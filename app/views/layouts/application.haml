@@ -14,6 +14,8 @@
     
     %link(rel="stylesheet" type="text/css" href="/css/styles.css")
     %link(rel="stylesheet" type="text/css" href="/css/pygments.css")
+    %link(rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
+
     
     %title="Nchan - flexible pub/sub server for the modern web."
   
@@ -49,20 +51,43 @@
         :markdown
           Oh, hello there. I'm Leo. 
           
-          Do you have questions? A successful large-scale deployment? ..A failing one?
-          
+          Do you have questions? A successful large-scale deployment? ..A failing one?          
           Found a bug? Want to submit a patch? Send money? ...Cake?
           
-          Email me at  [nchan@slact.net](mailto:nchan@slact.net?subject=Nchan support)
+          Email me at  [nchan@slact.net](mailto:nchan@slact.net?subject=I like Nchan)
           , or get in touch with me on [github](https://github.com/slact)
           
-          ## Support
-          
-          Send me money!!
-          
-          <img src="img/bitcoin-QR.png" alt="15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3" />
-          
-          bitcoin: `[15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3](bitcoin:15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3?label=nchan)`
+      %h3="Support"
+      %p#contribute
+        %img.btc-QR(src="img/bitcoin-QR.png" alt="15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3")
+        If you found nchan useful, please consider donating to help its development.
+        
+        %table
+          %tr
+            %td
+              %i.fa.fa-btc
+            %td
+              Bitcoin
+            %td
+              %code
+                %a(href="bitcoin:15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3?label=nchan")="15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3"
+          %tr
+            %td
+              %i.fa.fa-paypal
+            %td
+              Paypal
+            %td
+              %form(action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top")
+                %input(type="hidden" name="cmd" value="_s-xclick")
+                %input(type="hidden" name="hosted_button_id" value="PN29WB8QXFP8J")
+                %input(type="image" src="/icons/btn_donate_LG.gif" border="0" name="submit" alt="Donate via Paypal" title="Give me money maybe?")
+                -#%img(alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1")
+        
+        :markdown
+          If you need help or support with any aspect of Nchan, consulting services are available. Contact me at 
+          [nchan@slact.net](mailto:nchan@slact.net?subject=Nchan Support).
+        
+        
       
     .closer
       %img(src="/icons/kopimi.png" alt="copy, but don't plagiarise")
