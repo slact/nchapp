@@ -175,15 +175,15 @@
   Now that you have a secure connection between the subscriber client and the server, you don't need to worry about the channel ID or messages being passively intercepted. This is a minimum requirement for secure message delivery, but it is not sufficient. 
   
   You must also take care to do at least one of the following:
-    - [Generate good, high-entropy Channel IDs](#generating-good-channel-ids).
-    - [Authorize all subscribers with the `nchan_authorize_request` config directive](#authentication-with-nchan_authorize_request).
+    - [Generate good, high-entropy Channel IDs](#generate-good-channel-ids).
+    - [Authorize all subscribers with the `nchan_authorize_request` config directive](#authenticate-with-nchan_authorize_request).
     - [Authorize subscribers and hide channel IDs with the "`X-Accel-Redirect`" mechanism](#authenticate-and-hide-the-channel-id-with-x-accel-redirect).
     
-  #### Generating Good Channel IDs
+  #### Generate Good Channel IDs
   
   An ID that can be guessed is an ID that can be hijacked. If you are not authenticating subscribers (as described below), a channel ID should be impossible to guess. Use at least 128 bits of entropy to generate a random token, associate it with the authenticated user, and share it only with the user's client. Do not reuse tokens, just as you would not reuse session IDs.
   
-  #### Authentication with `nchan_authorize_request`
+  #### Authenticate with `nchan_authorize_request`
   
   This method behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
   
