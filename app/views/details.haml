@@ -45,29 +45,102 @@
   
   You can also can use differently-configured publisher locations to dynamically update a channel's message retention settings. This can be used to erase messages or to scale an existing channel's message retention as desired.
 
-
-%a#channel-ids(href="#channel-ids")
-  %h2="Channel IDs"
-:markdown
-  - high-entropy channel ids
-  - different location configurations
-  - multi-channel use cases
-
 %a#securing-channels(href="#securing-channels")
   %h2="Securing Channels"
 :markdown
-  - `nchan_subscribe_existing_channels_only`
-  - `nchan_authorize_request`
-  - Using `X-Accel-Redirect`
+  ### Securing Publisher Endpoints
+  Consider the use case of an application where authenticated users each use a private, dedicated channel for live updates. The configuration might look like this:
+  
+  ```nginx
+  http {
+    server {
+      #available only on localhost
+      listen  127.0.0.1  8080;
+      location ~ /pub/(\w+)$ {
+        nchan_publisher;
+        nchan_channel_group my_app_group;
+        nchan_channel_id $1;
+      }
+    }
+    
+    server {
+      #available to the world
+      listen 80;
+      location ~/sub/(\w+)$ {
+        nchan_subscriber;
+        nchan_channel_group my_app_group;
+        nchan_channel_id $1;
+      }
+    }
+  }
+  
+  ```
+
+  Here, the subscriber endpoint is available on a public-facing port 80, and the publisher endpoint is only available on localhost, so can be accessed only by applications residing on that machine.
+  
+  ### Keeping the Channel Private
+  
+  A Channel ID that is meant to be private should be treated with the same care as a session ID token. Considering the above use case of one-channel-per-user, how can we ensure that only the authenticated user, and no one else, is able to access his channel? 
+  
+  First, if you intend on securing the channel contents, you must use TLS/SSL:
+  
+  ```nginx 
+  http {
+    server {
+      #available only on localhost
+      listen  127.0.0.1  8080;
+      #...publisher endpoint config
+    }
+    server {
+      #available to the world
+      listen 443;
+      #SSL config goes here
+      location ~/sub/(\w+)$ {
+        nchan_subscriber;
+        nchan_channel_group my_app_group;
+        nchan_channel_id $1;
+      }
+    }
+  }
+  
+  ```
+  
+  Now that you have a secure connection between the subscriber client and the server, you don't need to worry about the channel ID or messages being passively intercepted. This is a minimum requirement for secure message delivery, but it is not sufficient. 
+  
+  You must also take care to do at least one of the following:
+    - [Generate good, high-entropy Channel IDs](#generating-good-channel-ids).
+    - [Authorize all subscribers with the `nchan_authorize_request` config directive](#authentication-with-nchan_authorize_request).
+    - [Authorize subscribers and hide channel IDs with the "`X-Accel-Redirect`" mechanism](#authenticate-and-hide-the-channel-id-with-x-accel-redirect).
+    
+  #### Generating Good Channel IDs
+  
+  An ID that can be guessed is an ID that can be hijacked. If you are not authenticating subscribers (as described below), a channel ID should be impossible to guess. Use at least 128 bits of entropy to generate a random token, associate it with the authenticated user, and share it only with the user's client. Do not reuse tokens, just as you would not reuse session IDs.
+  
+  #### Authentication with `nchan_authorize_request`
+  
+  **DOCUMENTATION IN PROGRESS**  
+  
+  Like `auth_request` module.
+  
+  #### Authenticate and hide the channel ID with X-Accel-Redirect
+  
+  **DOCUMENTATION IN PROGRESS**  
+  
+  This one's a little tricky. 
+
 
 %a#websocket(href="#websocket")
   %h2="Websocket"
 :markdown
+  **DOCUMENTATION IN PROGRESS**  
+  
   - unsupported features
 
 %a#using-redis(href="#using-redis")
   %h2="Using Redis"
 :markdown
+  **DOCUMENTATION IN PROGRESS**  
+  
   - benefits
   - drawbacks
   - horizontal scaling across many nginx instances
