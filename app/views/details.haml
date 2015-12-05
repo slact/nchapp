@@ -39,21 +39,21 @@
   
   ```console
   > ./pub.rb --response --once --message "msg1" /pub/bigbuffer
-   Publishing to http://localhost:8082/pub/bigbuffer.
+   Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 1
    last requested: 0 sec. ago (-1=never)
    active subscribers: 0
   
   > ./pub.rb --response --once --message "msg2" /pub/bigbuffer
-   Publishing to http://localhost:8082/pub/bigbuffer.
+   Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 2
    last requested: 4 sec. ago (-1=never)
    active subscribers: 0
   
   > ./pub.rb --response --once --message "msg3" /pub/bigbuffer
-   Publishing to http://localhost:8082/pub/bigbuffer. 
+   Publishing to http://localhost:80/pub/bigbuffer. 
    202
    queued messages: 3
    last requested: 10 sec. ago (-1=never)
@@ -68,7 +68,7 @@
   ^C^C
   
   > ./pub.rb --response --once --message "nomsg" /pub/nobuffer
-   Publishing to http://localhost:8082/pub/nobuffer.
+   Publishing to http://localhost:80/pub/nobuffer.
    201
    queued messages: 0
    last requested: 5 sec. ago (-1=never)
@@ -80,21 +80,21 @@
    ^C^C
   
   > ./pub.rb --response --once --message "another1" /pub/bigbuffer
-   Publishing to http://localhost:8082/pub/bigbuffer.
+   Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 1
    last requested: 9 sec. ago (-1=never)
    active subscribers: 0
   
   > ./pub.rb --response --once --message "another2" /pub/bigbuffer
-   Publishing to http://localhost:8082/pub/bigbuffer.
+   Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 2
    last requested: 12 sec. ago (-1=never)
    active subscribers: 0
   
   > ./sub.rb --id /sub/weird_settings
-   Subscribing 1 longpoll client to http://localhost:8082/sub/weird_settings.
+   Subscribing 1 longpoll client to http://localhost:80/sub/weird_settings.
    Timeout: 60sec, quit msg: FIN
    <1449346804:0> another1
    <1449346809:0> another2
@@ -134,7 +134,7 @@
     server {
       #available to the world
       listen 80;
-      location ~/sub/(\w+)$ {
+      location ~ /sub/(\w+)$ {
         nchan_subscriber;
         nchan_channel_group my_app_group;
         nchan_channel_id $1;
@@ -161,16 +161,15 @@
     }
     server {
       #available to the world
-      listen 443;
+      listen 443 ssl;
       #SSL config goes here
-      location ~/sub/(\w+)$ {
+      location ~ /sub/(\w+)$ {
         nchan_subscriber;
         nchan_channel_group my_app_group;
         nchan_channel_id $1;
       }
     }
   }
-  
   ```
   
   Now that you have a secure connection between the subscriber client and the server, you don't need to worry about the channel ID or messages being passively intercepted. This is a minimum requirement for secure message delivery, but it is not sufficient. 
@@ -186,16 +185,105 @@
   
   #### Authentication with `nchan_authorize_request`
   
-  **DOCUMENTATION IN PROGRESS**  
+  This method behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
   
-  Like `auth_request` module.
+  Consider the configuration:
+  ```nginx
+    upstream my_app {
+      server 127.0.0.1:8080;
+    }
+    location = /subauth {
+      internal;
+      proxy_pass http://my_app/subscriber_authorize;
+      proxy_pass_request_body off;
+      proxy_set_header Content-Length "";
+      proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
+      proxy_set_header X-Prev-Message-Id $nchan_prev_message_id;
+      proxy_set_header X-Channel-Id $nchan_channel_id;
+      proxy_set_header X-Channel-Id2 $nchan_channel_id2;
+      proxy_set_header X-Channel-Id3 $nchan_channel_id3;
+      proxy_set_header X-Channel-Id4 $nchan_channel_id4;
+      proxy_set_header X-Original-URI $request_uri;
+      proxy_set_header X-Forwarded-For $remote_addr;
+    }
+    
+    location ~ /sub/auth/(\w+)$ {
+      nchan_channel_id $1;
+      nchan_authorize_request /subauth;
+      nchan_subscriber;
+      nchan_channel_group test;
+    }
+  ```
+  
+  Here, any request to the subscriber endpoint location `/sub/auth/<...>`
+  will need to be authorized by your application (`my_app`). Nginx will generate a `GET /subscriber_authorize` request to the application, with additional headers set by the `proxy_set_header` directives. Note that Nchan-specific variables are available for this authorization request.
+  Once your application receives this request, it should decide whether or not to authorize the subscriber. This can be done based on a forwarded session cookie, IP address, or any set of parameters of your choosing. If authorized, it should respond with an empty `200 OK` response, and the client will be subscribed to the channel. Otherwise, respond with a `403 Forbidden`, and this will be forwarded to the client.
+  
+  Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time thy request the next message, which may flood your application with too many authorization requests.
+  
   
   #### Authenticate and hide the channel ID with X-Accel-Redirect
-  
-  **DOCUMENTATION IN PROGRESS**  
-  
-  This one's a little tricky. 
 
+  This method uses the [X-Accel feature](https://www.nginx.com/resources/wiki/start/topics/examples/x-accel) of Nginx upstream proxies to perform an internal request to a subscriber endpoint.
+  It allows a subscriber client to be authenticated by your application, and then redirected by nginx internally to a location chosen by your appplication (such as a publisher or subscriber endpoint). This makes it possible to have securely authenticated clients that are unaware of the channel id they are subscribed to.
+  
+  Consider the following configuration:
+  ```nginx 
+  upstream my_app {
+    server 127.0.0.1:8080;
+  }
+
+  server {
+    listen 80; 
+    
+    location = /sub_upstream {
+      proxy_pass http://upstream_app/subscriber_x_accel_redirect;
+      proxy_set_header X-Forwarded-For $remote_addr;
+    }
+    
+    location ~ /sub/internal/(\w+)$ {
+      internal; #this location only accessible for internal nginx redirects
+      nchan_subscriber;
+      nchan_channel_id $1;
+      nchan_channel_group test;
+    }
+  }
+  ```
+  
+  As commented, `/sub/internal/` is inaccessible from the outside:
+  ```console
+  > curl  -v  http://127.0.0.1/sub/internal/foo
+   
+   < HTTP/1.1 404 Not Found
+   < Server: nginx/1.9.5
+   <
+   <html>
+   <head><title>404 Not Found</title></head>
+   <body bgcolor="white">
+   <center><h1>404 Not Found</h1></center>
+   <hr><center>nginx/1.9.5</center>
+   </body>
+   </html>
+  ```
+  
+  But if a request is made to `/sub_upstream`, it gets forwarded to your application (`my_app`) on port 8080 with the url `/subscriber_x_accel_redirect`.
+  Note that you can set any forwarded headers here like any [`proxy_pass`](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) Nginx location, 
+  but unlike the case with `nchan_authorize_request`, Nchan-specific variables are not available.
+  
+  Now, your application must be set up to handle the request to `/subscriber_x_accel_redirect`. You should make sure the client is properly authenticated (maybe using a session cookie), and generate an associated channel id. If authentication fails, respond with a normal `403 Forbidden` response.
+  
+  If your application succesfully authenticates the subscriber request, you now need to instruct Nginx to issue an internal redirect to `/sub/internal/my_channel_id`.
+  This is accomplished by responding with an empty `200 OK` response that includes two headers:
+  - `X-Accel-Redirect: /sub/internal/my_channel_id`
+  - `X-Accel-Buffering: no`
+  
+  In the presence of these headers, Nginx will not forward your app's response to the client, and instead will *internally* redirect to `/sub/internal/my_channel_id`. 
+  This will behave as if the client had requested the subscriber endpoint location directly.
+  
+  Thus using X-Accel-Redirect it is possible to both authenticate all subscribers *and* keep channel IDs completely hidden from subscribers.
+  
+  This method is especially useful for EventSource and Websocket subscribers. Long-Polling subscribers will need to be re-authenticated for every new message, which may flood your application with too many authentication requests.
+  
 
 %a#websocket(href="#websocket")
   %h2="Websocket"
