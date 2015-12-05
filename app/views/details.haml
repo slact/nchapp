@@ -31,6 +31,8 @@
     }
   ``` 
 
+  Let's also assume I have two command-line scripts, [`pub.rb`](https://github.com/slact/nchan/blob/master/dev/pub.rb) and [`sub.rb`](https://github.com/slact/nchan/blob/master/dev/sub.rb) for publishing and subscribing respectively.
+  
   What happens if you publish to the channel `foo` from different locations, say, first through `POST /pub/bigbuffer`, then `POST /pub/nobuffer`?  
   All messages published before the `POST /pub/nobuffer` will be deleted, because the request to `/pub/nobuffer` will have disabled the channel `foo`'s message buffer.  
   
