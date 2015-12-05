@@ -1,6 +1,6 @@
 %h1="Details"
 %p
-  While Nchan is designed to be straightforward to configure and use, it has its quirks. Some are the result of being a module to a general-purpose web server, some are features that have not yet been implemented, and yet others are there to expose extra features for the brave developer.
+  While Nchan is designed to be straightforward to configure and use, it has its quirks. Some are the result of being a module for a general-purpose web server, some are features that have not yet been implemented, and others are there to expose extra features for the brave developer.
 
 %a#publisher-endpoint-configs(href="#publisher-endpoint-configs")
   %h2="Publisher Endpoints, Locations, and Configurations"
@@ -15,28 +15,94 @@
   ```nginx
     location = /pub/nobuffer {
       nchan_publisher;
-      nchan_chanel_id foo;
+      nchan_channel_id foo;
       nchan_store_messages off;
     }
     
     location = /pub/bigbuffer {
       nchan_publisher;
-      nchan_chanel_id foo;
+      nchan_channel_id foo;
       nchan_message_buffer_length 30;
+      nchan_message_timeout 10m;
     }
     
     location = /sub/weird_settings {
       nchan_subscriber;
-      nchan_chanel_id foo;
+      nchan_channel_id foo;
+      nchan_subscriber_first_message oldest;
     }
   ``` 
 
   Let's also assume I have two command-line scripts, [`pub.rb`](https://github.com/slact/nchan/blob/master/dev/pub.rb) and [`sub.rb`](https://github.com/slact/nchan/blob/master/dev/sub.rb) for publishing and subscribing respectively.
   
-  What happens if you publish to the channel `foo` from different locations, say, first through `POST /pub/bigbuffer`, then `POST /pub/nobuffer`?  
-  All messages published before the `POST /pub/nobuffer` will be deleted, because the request to `/pub/nobuffer` will have disabled the channel `foo`'s message buffer.  
+  What happens if you publish to the channel `foo` from different locations, say, first through `POST /pub/bigbuffer`, then `POST /pub/nobuffer`?
   
-  Publishing to `/pub/bigbuffer` will again restore message storage (up to 30 messages), as this will apply that location's config to the channel `foo`.
+  ```console
+  > ./pub.rb --response --once --message "msg1" /pub/bigbuffer
+   Publishing to http://localhost:8082/pub/bigbuffer.
+   202
+   queued messages: 1
+   last requested: 0 sec. ago (-1=never)
+   active subscribers: 0
+  
+  > ./pub.rb --response --once --message "msg2" /pub/bigbuffer
+   Publishing to http://localhost:8082/pub/bigbuffer.
+   202
+   queued messages: 2
+   last requested: 4 sec. ago (-1=never)
+   active subscribers: 0
+  
+  > ./pub.rb --response --once --message "msg3" /pub/bigbuffer
+   Publishing to http://localhost:8082/pub/bigbuffer. 
+   202
+   queued messages: 3
+   last requested: 10 sec. ago (-1=never)
+   active subscribers: 0
+  
+  > ./sub.rb --id /sub/weird_settings                       
+   Subscribing 1 longpoll client to http://localhost:80/sub/weird_settings.
+   Timeout: 60sec, quit msg: FIN
+   <1449346161:0> msg1
+   <1449346165:0> msg2
+   <1449346171:0> msg3
+  ^C^C
+  
+  > ./pub.rb --response --once --message "nomsg" /pub/nobuffer
+   Publishing to http://localhost:8082/pub/nobuffer.
+   201
+   queued messages: 0
+   last requested: 5 sec. ago (-1=never)
+   active subscribers: 0
+  
+  > ./sub.rb --id /sub/weird_settings                         
+   Subscribing 1 longpoll client to http://localhost:80/sub/weird_settings.
+   Timeout: 60sec, quit msg: FIN
+   ^C^C
+  
+  > ./pub.rb --response --once --message "another1" /pub/bigbuffer
+   Publishing to http://localhost:8082/pub/bigbuffer.
+   202
+   queued messages: 1
+   last requested: 9 sec. ago (-1=never)
+   active subscribers: 0
+  
+  > ./pub.rb --response --once --message "another2" /pub/bigbuffer
+   Publishing to http://localhost:8082/pub/bigbuffer.
+   202
+   queued messages: 2
+   last requested: 12 sec. ago (-1=never)
+   active subscribers: 0
+  
+  > ./sub.rb --id /sub/weird_settings
+   Subscribing 1 longpoll client to http://localhost:8082/sub/weird_settings.
+   Timeout: 60sec, quit msg: FIN
+   <1449346804:0> another1
+   <1449346809:0> another2
+  ^C^C
+  ```
+  
+  
+  All messages published before publishing to `/pub/nobuffer` are deleted, because the request to `/pub/nobuffer` disables the channel `foo`'s message buffer, clearing out all its' stored messages. Publishing to `/pub/bigbuffer` afterwards restored message storage, as this applied that location's config to the channel `foo`.
   
   This applies to all publishing-related configuration settings, which at present are  
   - `nchan_message_buffer_length`
