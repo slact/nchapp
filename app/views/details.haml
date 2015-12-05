@@ -193,7 +193,6 @@
       server 127.0.0.1:8080;
     }
     location = /subauth {
-      internal;
       proxy_pass http://my_app/subscriber_authorize;
       proxy_pass_request_body off;
       proxy_set_header Content-Length "";
@@ -283,21 +282,49 @@
   Thus using X-Accel-Redirect it is possible to both authenticate all subscribers *and* keep channel IDs completely hidden from subscribers.
   
   This method is especially useful for EventSource and Websocket subscribers. Long-Polling subscribers will need to be re-authenticated for every new message, which may flood your application with too many authentication requests.
-  
-
-%a#websocket(href="#websocket")
-  %h2="Websocket"
-:markdown
-  **DOCUMENTATION IN PROGRESS**  
-  
-  - unsupported features
 
 %a#using-redis(href="#using-redis")
   %h2="Using Redis"
 :markdown
-  **DOCUMENTATION IN PROGRESS**  
+  [Redis](http://redis.io)
+  can be used to add data persistence and horizontal scalability to your Nchan setup. This is done with the `nchan_redis_url` and `nchan_use_redis` settings:
   
-  - benefits
-  - drawbacks
-  - horizontal scaling across many nginx instances
-  - future cluster support
+  ```nginx
+  http {
+    nchan_redis_url "redis://redis_server:6379";
+    server {
+      listen 80;
+      
+      location ~ /redis_sub/(\w+)$ {
+        nchan_subscriber;
+        nchan_channel_id $1;
+        nchan_use_redis on;
+        nchan_channel_group "redis_backed_channel";
+      }
+      location ~ /redis_pub/(\w+)$ {
+        nchan_publisher;
+        nchan_channel_id $1;
+        nchan_use_redis on;
+        nchan_channel_group "redis_backed_channel";
+      }
+      
+      location ~ /regular_sub/(\w+)$ {
+        nchan_subscriber;
+        nchan_channel_id $1;
+        nchan_channel_group noredis;
+      }
+      location ~ /regular_pub/(\w+)$ {
+        nchan_publisher;
+        nchan_channel_id $1;
+        nchan_channel_group noredis;
+      }
+    }
+  } 
+  ```
+  
+  All servers with the above configuration connecting to the same redis server share channel and message data.
+  
+  All redis-backed publisher and subscriber endpoints [must be configured](#publisher-endpoint-configs) with `nchan_use_redis on;`.
+  Channels that never use redis can be configured side-by-side with redis-backed channels, provided the endpoints never overlap. (This can be done, as above, by setting separate `nchan_channel_group`s.)
+
+  Redis-backed channels are a new feature. It's been well-tested, but there may still be bugs if the redis connection is interrupted. Please help test it and report any problems!
