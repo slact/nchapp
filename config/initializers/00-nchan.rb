@@ -40,15 +40,18 @@ module Nchapp
       Git.clone("https://github.com/slact/nchan.git", 'nchan', :path => "gitdir")
     end
     
-    def self.maybe_reload_templates
+    self.check_nchan
+  end
+  
+  class Nchapp::ApplicationController < Nchapp::Application
+    
+    def maybe_reload_templates
       last_commit = Queris.redis.get @@commit_key
       return if last_commit == @@nchan_current_commit
       @@nchan_current_commit = last_commit
       
       puts "reload templates!"
-      self.reload_templates
+      clear_template_render_cache
     end
-    
-    self.check_nchan
   end
 end
