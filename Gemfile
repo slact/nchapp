@@ -4,6 +4,7 @@ gem 'json'
 gem 'cuba'
 gem 'roda'
 gem 'syro'
+gem 'unicorn'
 
 gem 'scrypt'
 
