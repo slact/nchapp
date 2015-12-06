@@ -1,11 +1,8 @@
 class Nchapp::DownloadController < Nchapp::ApplicationController
-  def serve_pkg(glob)
-    found = nil
-    Dir.chdir "gitdir/nchan/dev/package/pkgs/" do 
-      found = Dir.glob(glob).first
-    end
-    if found
-      response.redirect "/pkgs/#{found}"
+  def serve_pkg(name)
+    pkg = CompiledPackage.find(name)
+    if pkg
+      response.redirect "/pkgs/#{pkg.filename}"
     else
       response.status = 404
       render '404'
@@ -13,11 +10,11 @@ class Nchapp::DownloadController < Nchapp::ApplicationController
   end
   
   get '/nginx-nchan-latest.deb' do
-    serve_pkg "*.deb"
+    serve_pkg :debian
   end
   
   get '/nginx-nchan-latest.tar.gz' do
-    serve_pkg "*.tar.gz"
+    serve_pkg :tarball
   end
   
   #404

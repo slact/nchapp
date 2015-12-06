@@ -12,6 +12,19 @@ def nchan_git_pull
   end
 end
 
+def find_pkg(name, glob)
+Dir.chdir "gitdir/nchan/dev/package/pkgs/" do 
+    cp = CompiledPackage.get(name)
+    found = Dir.glob(glob).first
+    if found
+      cp.filename = found;
+      cp.save
+    else
+      cp.delete
+    end
+  end
+end
+
 desc 'Start a console'
 task :console do
   ENV['RACK_ENV'] ||= 'development'
@@ -25,7 +38,6 @@ task :console do
   pry
 end
 
-
 desc 'rebuild static packages'
 task :rebuild do
   ENV['RACK_ENV'] ||= 'development'
@@ -34,6 +46,9 @@ task :rebuild do
   
   nchan_git_pull
   system "gitdir/nchan/dev/package/repackage.sh"
+  find_pkg :debian, "*.deb"
+  find_pkg :tarball, "*.tar.gz"
 end
+
 
 task default: :test
