@@ -4,6 +4,7 @@ class Nchapp::RootController < Nchapp::ApplicationController
   end
   
   get '/readme' do
+    Nchapp::Application.maybe_reload_templates 
     render 'README'
   end
   
@@ -12,6 +13,7 @@ class Nchapp::RootController < Nchapp::ApplicationController
   end
   
   get '/changelog' do
+    Nchapp::Application.maybe_reload_templates 
     render 'changelog'
   end
   

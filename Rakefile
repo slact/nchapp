@@ -5,13 +5,6 @@ Rake::TestTask.new do |t|
   t.pattern = 'spec/**/*_spec.rb'
 end
 
-def nchan_git_pull
-  Dir.chdir "gitdir/nchan/" do
-    system "git reset --hard"
-    system "git pull"
-  end
-end
-
 def find_pkg(name, glob)
 Dir.chdir "gitdir/nchan/dev/package/pkgs/" do 
     cp = CompiledPackage.get(name)
@@ -40,15 +33,36 @@ end
 
 desc 'rebuild static packages'
 task :rebuild do
+  build_key = "Nchan:nchapp:nchan_last_build"
+  
   ENV['RACK_ENV'] ||= 'development'
   require_relative 'config/application'
   ARGV.clear
   
-  nchan_git_pull
-  system "gitdir/nchan/dev/package/repackage.sh"
-  find_pkg :debian, "*.deb"
-  find_pkg :tarball, "*.tar.gz"
+  last_build=Queris.redis.get build_key
+  current_commit=Nchapp::Application.nchan_current_commit
+  
+  if last_build != current_commit
+    puts "old build: #{last_build}"
+    puts "new ver:   #{current_commit}"
+    puts "should rebuild."
+    system "gitdir/nchan/dev/package/repackage.sh"
+    find_pkg :debian, "*.deb"
+    find_pkg :tarball, "*.tar.gz"
+    Queris.redis.set build_key, current_commit
+  else
+    puts "on latest build #{current_commit}"
+  end
+  
 end
 
+
+
+desc 'update documentation to nchan master'
+task :update do
+  ENV['RACK_ENV'] ||= 'development'
+  require_relative 'config/application'
+  ARGV.clear
+end
 
 task default: :test
