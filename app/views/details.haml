@@ -325,6 +325,6 @@
   All servers with the above configuration connecting to the same redis server share channel and message data.
   
   All redis-backed publisher and subscriber endpoints [must be configured](#publisher-endpoint-configs) with `nchan_use_redis on;`.
-  Channels that never use redis can be configured side-by-side with redis-backed channels, provided the endpoints never overlap. (This can be done, as above, by setting separate `nchan_channel_group`s.)
+  Channels that never use redis can be configured side-by-side with redis-backed channels, provided the endpoints never overlap. (This can be ensured, as above, by setting separate `nchan_channel_group`s.)
 
   Redis-backed channels are a new feature. It's been well-tested, but there may still be bugs if the redis connection is interrupted. Please help test it and report any problems!
