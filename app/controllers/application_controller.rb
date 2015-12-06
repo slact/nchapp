@@ -1,8 +1,8 @@
 require "securerandom"
 class Nchapp::ApplicationController < Nchapp::Application
   include Hobbit::Render
-  include Hobbit::Session
-  include Hobbit::Filter
+  #include Hobbit::Session
+  #include Hobbit::Filter
 
   def self.descendants
     ObjectSpace.each_object(Class).select { |klass| klass < self }

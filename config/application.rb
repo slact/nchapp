@@ -7,9 +7,9 @@ Bundler.require :default, ENV['RACK_ENV'].to_sym
 
 module Nchapp
   class Application < Hobbit::Base
-    include Hobbit::Filter
+    #include Hobbit::Filter
     include Hobbit::Environment
-    include Hobbit::Session
+    #include Hobbit::Session
     
     #load config
     all_conf=YAML.load_file 'config/env.yml'
@@ -39,9 +39,9 @@ module Nchapp
       use PryRescue::Rack
       #use BetterErrors::Middleware
     end
-    use Rack::Session::Redis
+    #use Rack::Session::Redis
     # must be used after Rack::Session::Cookie
-    use Rack::Protection, except: :http_origin
+    #use Rack::Protection, except: :http_origin
     
     #static resources
     use Rack::Static, root: 'app/assets/', urls: ['/js', '/css', '/img', '/icons']
