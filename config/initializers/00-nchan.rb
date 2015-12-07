@@ -27,10 +27,15 @@ module Nchapp
         g = Git.open("gitdir/nchan")
         check_nchan
       end
-      puts g.reset_hard
-      puts g.pull
       
-      @@nchan_current_commit = g.describe
+      Dir.chdir "gitdir/nchan" do
+        system "git reset --hard"
+        system "git pull --tags"
+        system "git show --stat | cat"
+        @@nchan_current_commit = `git describe --tags`.chomp
+      end
+      
+      
       @@nchan_prev_commit ||= @@nchan_current_commit 
       
       Queris.redis.set @@commit_key, @@nchan_current_commit
