@@ -11,7 +11,7 @@ module Nchapp
         url="/#{name}"
       end
       
-      puts "map #{url} to #{ctrl.name}"
+      #puts "map #{url} to #{ctrl.name}"
       map(url) do
         run ctrl.new
       end
