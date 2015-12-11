@@ -1,11 +1,11 @@
 class Nchapp::RootController < Nchapp::ApplicationController
   get '/' do
-    response.redirect '/readme'
+    render 'README'
   end
   
   get '/readme' do
     #maybe_reload_templates 
-    render 'README'
+    response.redirect '/'
   end
   
   get '/upgrade' do
