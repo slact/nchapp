@@ -28,13 +28,22 @@
   %tr
     %th="Horizontal Scaling"
     %td.pushmodule="No built-in features to scale across multiple Nginx instances."
-    %td.nchan="Can be quickly scaled up horizontally across Nginx instances using Redis."
+    %td.nchan
+      :markdown
+        Can be quickly scaled up horizontally across Nginx instances 
+        [using Redis](/details#using-redis).
   %tr
     %th="Subscribers"
     %td.pushmodule
       Long-Poll, Interval-Poll
     %td.nchan
-      Websocket, EventSource, Long-Poll, Interval-Poll
+      :erb
+        <a href="/#websocket">Websocket</a>,
+        <a href="/#eventsource">EventSource</a>,
+        <a href="/#long-poll">Long-Poll</a>,
+        <a href="/#interval-poll">Interval-Poll</a>,
+        <a href="/#http-chunked-transfer">HTTP Chunked Transfer</a>,
+        <a href="/#http-multipart-mixed">HTTP Multipart/Mixed</a>
   %tr
     %th="Publishers"
     %td.pushmodule="HTTP"
@@ -63,7 +72,7 @@
     %td.nchan
       :markdown
         - Channel info for Publisher endpoint requests
-        - Channel event metachannels with configurable event message strings.
+        - Channel event [metachannels](/#nchan_channel_events_channel_id) with configurable event [message strings](/#nchan_channel_event_string).
   
   %tr
     %th="Channel Security"
@@ -75,7 +84,7 @@
       :markdown
         - Hiding channel URL via `X-Accel-Redirect`
         - Disallow new channel creation by subscribers
-        - Upstream callback URL for subscriber authorization
+        - Upstream [callback URL](/details#authenticate-with-nchan_authorize_request) for publisher and subscriber authorization
   
   %tr
     %th="Subscriber Concurrency"
