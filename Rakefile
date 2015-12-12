@@ -32,7 +32,7 @@ task :console do
 end
 
 desc 'rebuild static packages'
-task :rebuild do
+task :repackage do
   build_key = "Nchan:nchapp:nchan_last_build"
   
   ENV['RACK_ENV'] ||= 'development'
