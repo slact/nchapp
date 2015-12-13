@@ -1,6 +1,6 @@
 /* MooTools: the javascript framework. license: MIT-style license. copyright: Copyright (c) 2006-2015 [Valerio Proietti](http://mad4milk.net/).*/ 
 /*!
-Web Build: http://mootools.net/more/builder/a939670e682cfc25be86627f02951df8
+Web Build: http://mootools.net/more/builder/b17836ba4c3a37a5c418f5c50a017ecf
 */
 /*
 ---
@@ -1775,93 +1775,6 @@ Element.implement({
 /*
 ---
 
-script: String.QueryString.js
-
-name: String.QueryString
-
-description: Methods for dealing with URI query strings.
-
-license: MIT-style license
-
-authors:
-  - Sebastian Markbåge
-  - Aaron Newton
-  - Lennart Pilon
-  - Valerio Proietti
-
-requires:
-  - Core/Array
-  - Core/String
-  - MooTools.More
-
-provides: [String.QueryString]
-
-...
-*/
-
-(function(){
-
-/**
- * decodeURIComponent doesn't do the correct thing with query parameter keys or
- * values. Specifically, it leaves '+' as '+' when it should be converting them
- * to spaces as that's the specification. When browsers submit HTML forms via
- * GET, the values are encoded using 'application/x-www-form-urlencoded'
- * which converts spaces to '+'.
- *
- * See: http://unixpapa.com/js/querystring.html for a description of the
- * problem.
- */
-var decodeComponent = function(str){
-	return decodeURIComponent(str.replace(/\+/g, ' '));
-};
-
-String.implement({
-
-	parseQueryString: function(decodeKeys, decodeValues){
-		if (decodeKeys == null) decodeKeys = true;
-		if (decodeValues == null) decodeValues = true;
-
-		var vars = this.split(/[&;]/),
-			object = {};
-		if (!vars.length) return object;
-
-		vars.each(function(val){
-			var index = val.indexOf('=') + 1,
-				value = index ? val.substr(index) : '',
-				keys = index ? val.substr(0, index - 1).match(/([^\]\[]+|(\B)(?=\]))/g) : [val],
-				obj = object;
-			if (!keys) return;
-			if (decodeValues) value = decodeComponent(value);
-			keys.each(function(key, i){
-				if (decodeKeys) key = decodeComponent(key);
-				var current = obj[key];
-
-				if (i < keys.length - 1) obj = obj[key] = current || {};
-				else if (typeOf(current) == 'array') current.push(value);
-				else obj[key] = current != null ? [current, value] : value;
-			});
-		});
-
-		return object;
-	},
-
-	cleanQueryString: function(method){
-		return this.split('&').filter(function(val){
-			var index = val.indexOf('='),
-				key = index < 0 ? '' : val.substr(0, index),
-				value = val.substr(index + 1);
-
-			return method ? method.call(null, key, value) : (value || value === 0);
-		}).join('&');
-	}
-
-});
-
-})()
-
-/*
----
-
 script: Fx.Reveal.js
 
 name: Fx.Reveal
@@ -3207,6 +3120,376 @@ Fx.SmoothScroll = new Class({
 /*
 ---
 
+name: Element.Event.Pseudos
+
+description: Adds the functionality to add pseudo events for Elements
+
+license: MIT-style license
+
+authors:
+  - Arian Stolwijk
+
+requires: [Core/Element.Event, Core/Element.Delegation, Events.Pseudos]
+
+provides: [Element.Event.Pseudos, Element.Delegation.Pseudo]
+
+...
+*/
+
+(function(){
+
+var pseudos = {relay: false},
+	copyFromEvents = ['once', 'throttle', 'pause'],
+	count = copyFromEvents.length;
+
+while (count--) pseudos[copyFromEvents[count]] = Events.lookupPseudo(copyFromEvents[count]);
+
+DOMEvent.definePseudo = function(key, listener){
+	pseudos[key] = listener;
+	return this;
+};
+
+var proto = Element.prototype;
+[Element, Window, Document].invoke('implement', Events.Pseudos(pseudos, proto.addEvent, proto.removeEvent));
+
+})();
+
+/*
+---
+
+name: Element.Event.Pseudos.Keys
+
+description: Adds functionality fire events if certain keycombinations are pressed
+
+license: MIT-style license
+
+authors:
+  - Arian Stolwijk
+
+requires: [Element.Event.Pseudos]
+
+provides: [Element.Event.Pseudos.Keys]
+
+...
+*/
+
+(function(){
+
+var keysStoreKey = '$moo:keys-pressed',
+	keysKeyupStoreKey = '$moo:keys-keyup';
+
+
+DOMEvent.definePseudo('keys', function(split, fn, args){
+
+	var event = args[0],
+		keys = [],
+		pressed = this.retrieve(keysStoreKey, []),
+		value = split.value;
+
+	if (value != '+') keys.append(value.replace('++', function(){
+		keys.push('+'); // shift++ and shift+++a
+		return '';
+	}).split('+'));
+	else keys = ['+'];
+
+	pressed.include(event.key);
+
+	if (keys.every(function(key){
+		return pressed.contains(key);
+	})) fn.apply(this, args);
+
+	this.store(keysStoreKey, pressed);
+
+	if (!this.retrieve(keysKeyupStoreKey)){
+		var keyup = function(event){
+			(function(){
+				pressed = this.retrieve(keysStoreKey, []).erase(event.key);
+				this.store(keysStoreKey, pressed);
+			}).delay(0, this); // Fix for IE
+		};
+		this.store(keysKeyupStoreKey, keyup).addEvent('keyup', keyup);
+	}
+
+});
+
+DOMEvent.defineKeys({
+	'16': 'shift',
+	'17': 'control',
+	'18': 'alt',
+	'20': 'capslock',
+	'33': 'pageup',
+	'34': 'pagedown',
+	'35': 'end',
+	'36': 'home',
+	'144': 'numlock',
+	'145': 'scrolllock',
+	'186': ';',
+	'187': '=',
+	'188': ',',
+	'190': '.',
+	'191': '/',
+	'192': '`',
+	'219': '[',
+	'220': '\\',
+	'221': ']',
+	'222': "'",
+	'107': '+',
+	'109': '-', // subtract
+	'189': '-'  // dash
+})
+
+})();
+
+/*
+---
+
+script: Keyboard.js
+
+name: Keyboard
+
+description: KeyboardEvents used to intercept events on a class for keyboard and format modifiers in a specific order so as to make alt+shift+c the same as shift+alt+c.
+
+license: MIT-style license
+
+authors:
+  - Perrin Westrich
+  - Aaron Newton
+  - Scott Kyle
+
+requires:
+  - Core/Events
+  - Core/Options
+  - Core/Element.Event
+  - Element.Event.Pseudos.Keys
+
+provides: [Keyboard]
+
+...
+*/
+
+(function(){
+
+	var Keyboard = this.Keyboard = new Class({
+
+		Extends: Events,
+
+		Implements: [Options],
+
+		options: {/*
+			onActivate: function(){},
+			onDeactivate: function(){},*/
+			defaultEventType: 'keydown',
+			active: false,
+			manager: null,
+			events: {},
+			nonParsedEvents: ['activate', 'deactivate', 'onactivate', 'ondeactivate', 'changed', 'onchanged']
+		},
+
+		initialize: function(options){
+			if (options && options.manager){
+				this._manager = options.manager;
+				delete options.manager;
+			}
+			this.setOptions(options);
+			this._setup();
+		},
+
+		addEvent: function(type, fn, internal){
+			return this.parent(Keyboard.parse(type, this.options.defaultEventType, this.options.nonParsedEvents), fn, internal);
+		},
+
+		removeEvent: function(type, fn){
+			return this.parent(Keyboard.parse(type, this.options.defaultEventType, this.options.nonParsedEvents), fn);
+		},
+
+		toggleActive: function(){
+			return this[this.isActive() ? 'deactivate' : 'activate']();
+		},
+
+		activate: function(instance){
+			if (instance){
+				if (instance.isActive()) return this;
+				//if we're stealing focus, store the last keyboard to have it so the relinquish command works
+				if (this._activeKB && instance != this._activeKB){
+					this.previous = this._activeKB;
+					this.previous.fireEvent('deactivate');
+				}
+				//if we're enabling a child, assign it so that events are now passed to it
+				this._activeKB = instance.fireEvent('activate');
+				Keyboard.manager.fireEvent('changed');
+			} else if (this._manager){
+				//else we're enabling ourselves, we must ask our parent to do it for us
+				this._manager.activate(this);
+			}
+			return this;
+		},
+
+		isActive: function(){
+			return this._manager ? (this._manager._activeKB == this) : (Keyboard.manager == this);
+		},
+
+		deactivate: function(instance){
+			if (instance){
+				if (instance === this._activeKB){
+					this._activeKB = null;
+					instance.fireEvent('deactivate');
+					Keyboard.manager.fireEvent('changed');
+				}
+			} else if (this._manager){
+				this._manager.deactivate(this);
+			}
+			return this;
+		},
+
+		relinquish: function(){
+			if (this.isActive() && this._manager && this._manager.previous) this._manager.activate(this._manager.previous);
+			else this.deactivate();
+			return this;
+		},
+
+		//management logic
+		manage: function(instance){
+			if (instance._manager) instance._manager.drop(instance);
+			this._instances.push(instance);
+			instance._manager = this;
+			if (!this._activeKB) this.activate(instance);
+			return this;
+		},
+
+		drop: function(instance){
+			instance.relinquish();
+			this._instances.erase(instance);
+			if (this._activeKB == instance){
+				if (this.previous && this._instances.contains(this.previous)) this.activate(this.previous);
+				else this._activeKB = this._instances[0];
+			}
+			return this;
+		},
+
+		trace: function(){
+			Keyboard.trace(this);
+		},
+
+		each: function(fn){
+			Keyboard.each(this, fn);
+		},
+
+		/*
+			PRIVATE METHODS
+		*/
+
+		_instances: [],
+
+		_disable: function(instance){
+			if (this._activeKB == instance) this._activeKB = null;
+		},
+
+		_setup: function(){
+			this.addEvents(this.options.events);
+			//if this is the root manager, nothing manages it
+			if (Keyboard.manager && !this._manager) Keyboard.manager.manage(this);
+			if (this.options.active) this.activate();
+			else this.relinquish();
+		},
+
+		_handle: function(event, type){
+			//Keyboard.stop(event) prevents key propagation
+			if (event.preventKeyboardPropagation) return;
+
+			var bubbles = !!this._manager;
+			if (bubbles && this._activeKB){
+				this._activeKB._handle(event, type);
+				if (event.preventKeyboardPropagation) return;
+			}
+			this.fireEvent(type, event);
+
+			if (!bubbles && this._activeKB) this._activeKB._handle(event, type);
+		}
+
+	});
+
+	var parsed = {};
+	var modifiers = ['shift', 'control', 'alt', 'meta'];
+	var regex = /^(?:shift|control|ctrl|alt|meta)$/;
+
+	Keyboard.parse = function(type, eventType, ignore){
+		if (ignore && ignore.contains(type.toLowerCase())) return type;
+
+		type = type.toLowerCase().replace(/^(keyup|keydown):/, function($0, $1){
+			eventType = $1;
+			return '';
+		});
+
+		if (!parsed[type]){
+		    if (type != '+'){
+				var key, mods = {};
+				type.split('+').each(function(part){
+					if (regex.test(part)) mods[part] = true;
+					else key = part;
+				});
+
+				mods.control = mods.control || mods.ctrl; // allow both control and ctrl
+
+				var keys = [];
+				modifiers.each(function(mod){
+					if (mods[mod]) keys.push(mod);
+				});
+
+				if (key) keys.push(key);
+				parsed[type] = keys.join('+');
+			} else {
+			    parsed[type] = type;
+			}
+		}
+
+		return eventType + ':keys(' + parsed[type] + ')';
+	};
+
+	Keyboard.each = function(keyboard, fn){
+		var current = keyboard || Keyboard.manager;
+		while (current){
+			fn(current);
+			current = current._activeKB;
+		}
+	};
+
+	Keyboard.stop = function(event){
+		event.preventKeyboardPropagation = true;
+	};
+
+	Keyboard.manager = new Keyboard({
+		active: true
+	});
+
+	Keyboard.trace = function(keyboard){
+		keyboard = keyboard || Keyboard.manager;
+		var hasConsole = window.console && console.log;
+		if (hasConsole) console.log('the following items have focus: ');
+		Keyboard.each(keyboard, function(current){
+			if (hasConsole) console.log(document.id(current.widget) || current.wiget || current);
+		});
+	};
+
+	var handler = function(event){
+		var keys = [];
+		modifiers.each(function(mod){
+			if (event[mod]) keys.push(mod);
+		});
+
+		if (!regex.test(event.key)) keys.push(event.key);
+		Keyboard.manager._handle(event, event.type + ':keys(' + keys.join('+') + ')');
+	};
+
+	document.addEvents({
+		'keyup': handler,
+		'keydown': handler
+	});
+
+})();
+
+/*
+---
+
 script: Scroller.js
 
 name: Scroller
@@ -3585,212 +3868,87 @@ var Tips = this.Tips = new Class({
 /*
 ---
 
-script: Request.Queue.js
+script: Array.Extras.js
 
-name: Request.Queue
+name: Array.Extras
 
-description: Controls several instances of Request and its variants to run only one request at a time.
+description: Extends the Array native object to include useful methods to work with arrays.
 
 license: MIT-style license
 
 authors:
-  - Aaron Newton
+  - Christoph Pojer
+  - Sebastian Markbåge
 
 requires:
-  - Core/Element
-  - Core/Request
-  - Class.Binds
+  - Core/Array
+  - MooTools.More
 
-provides: [Request.Queue]
+provides: [Array.Extras]
 
 ...
 */
 
-Request.Queue = new Class({
+(function(nil){
 
-	Implements: [Options, Events],
+Array.implement({
 
-	Binds: ['attach', 'request', 'complete', 'cancel', 'success', 'failure', 'exception'],
-
-	options: {/*
-		onRequest: function(argsPassedToOnRequest){},
-		onSuccess: function(argsPassedToOnSuccess){},
-		onComplete: function(argsPassedToOnComplete){},
-		onCancel: function(argsPassedToOnCancel){},
-		onException: function(argsPassedToOnException){},
-		onFailure: function(argsPassedToOnFailure){},
-		onEnd: function(){},
-		*/
-		stopOnFailure: true,
-		autoAdvance: true,
-		concurrent: 1,
-		requests: {}
+	min: function(){
+		return Math.min.apply(null, this);
 	},
 
-	initialize: function(options){
-		var requests;
-		if (options){
-			requests = options.requests;
-			delete options.requests;
+	max: function(){
+		return Math.max.apply(null, this);
+	},
+
+	average: function(){
+		return this.length ? this.sum() / this.length : 0;
+	},
+
+	sum: function(){
+		var result = 0, l = this.length;
+		if (l){
+			while (l--){
+				if (this[l] != null) result += parseFloat(this[l]);
+			}
 		}
-		this.setOptions(options);
-		this.requests = {};
-		this.queue = [];
-		this.reqBinders = {};
-
-		if (requests) this.addRequests(requests);
+		return result;
 	},
 
-	addRequest: function(name, request){
-		this.requests[name] = request;
-		this.attach(name, request);
+	unique: function(){
+		return [].combine(this);
+	},
+
+	shuffle: function(){
+		for (var i = this.length; i && --i;){
+			var temp = this[i], r = Math.floor(Math.random() * ( i + 1 ));
+			this[i] = this[r];
+			this[r] = temp;
+		}
 		return this;
 	},
 
-	addRequests: function(obj){
-		Object.each(obj, function(req, name){
-			this.addRequest(name, req);
-		}, this);
-		return this;
+	reduce: function(fn, value){
+		for (var i = 0, l = this.length; i < l; i++){
+			if (i in this) value = value === nil ? this[i] : fn.call(null, value, this[i], i, this);
+		}
+		return value;
 	},
 
-	getName: function(req){
-		return Object.keyOf(this.requests, req);
+	reduceRight: function(fn, value){
+		var i = this.length;
+		while (i--){
+			if (i in this) value = value === nil ? this[i] : fn.call(null, value, this[i], i, this);
+		}
+		return value;
 	},
 
-	attach: function(name, req){
-		if (req._groupSend) return this;
-		['request', 'complete', 'cancel', 'success', 'failure', 'exception'].each(function(evt){
-			if (!this.reqBinders[name]) this.reqBinders[name] = {};
-			this.reqBinders[name][evt] = function(){
-				this['on' + evt.capitalize()].apply(this, [name, req].append(arguments));
-			}.bind(this);
-			req.addEvent(evt, this.reqBinders[name][evt]);
-		}, this);
-		req._groupSend = req.send;
-		req.send = function(options){
-			this.send(name, options);
-			return req;
-		}.bind(this);
-		return this;
-	},
-
-	removeRequest: function(req){
-		var name = typeOf(req) == 'object' ? this.getName(req) : req;
-		if (!name && typeOf(name) != 'string') return this;
-		req = this.requests[name];
-		if (!req) return this;
-		['request', 'complete', 'cancel', 'success', 'failure', 'exception'].each(function(evt){
-			req.removeEvent(evt, this.reqBinders[name][evt]);
-		}, this);
-		req.send = req._groupSend;
-		delete req._groupSend;
-		return this;
-	},
-
-	getRunning: function(){
-		return Object.filter(this.requests, function(r){
-			return r.running;
+	pluck: function(prop){
+		return this.map(function(item){
+			return item[prop];
 		});
-	},
-
-	isRunning: function(){
-		return !!(Object.keys(this.getRunning()).length);
-	},
-
-	send: function(name, options){
-		var q = function(){
-			this.requests[name]._groupSend(options);
-			this.queue.erase(q);
-		}.bind(this);
-
-		q.name = name;
-		if (Object.keys(this.getRunning()).length >= this.options.concurrent || (this.error && this.options.stopOnFailure)) this.queue.push(q);
-		else q();
-		return this;
-	},
-
-	hasNext: function(name){
-		return (!name) ? !!this.queue.length : !!this.queue.filter(function(q){ return q.name == name; }).length;
-	},
-
-	resume: function(){
-		this.error = false;
-		(this.options.concurrent - Object.keys(this.getRunning()).length).times(this.runNext, this);
-		return this;
-	},
-
-	runNext: function(name){
-		if (!this.queue.length) return this;
-		if (!name){
-			this.queue[0]();
-		} else {
-			var found;
-			this.queue.each(function(q){
-				if (!found && q.name == name){
-					found = true;
-					q();
-				}
-			});
-		}
-		return this;
-	},
-
-	runAll: function(){
-		this.queue.each(function(q){
-			q();
-		});
-		return this;
-	},
-
-	clear: function(name){
-		if (!name){
-			this.queue.empty();
-		} else {
-			this.queue = this.queue.map(function(q){
-				if (q.name != name) return q;
-				else return false;
-			}).filter(function(q){
-				return q;
-			});
-		}
-		return this;
-	},
-
-	cancel: function(name){
-		this.requests[name].cancel();
-		return this;
-	},
-
-	onRequest: function(){
-		this.fireEvent('request', arguments);
-	},
-
-	onComplete: function(){
-		this.fireEvent('complete', arguments);
-		if (!this.queue.length) this.fireEvent('end');
-	},
-
-	onCancel: function(){
-		if (this.options.autoAdvance && !this.error) this.runNext();
-		this.fireEvent('cancel', arguments);
-	},
-
-	onSuccess: function(){
-		if (this.options.autoAdvance && !this.error) this.runNext();
-		this.fireEvent('success', arguments);
-	},
-
-	onFailure: function(){
-		this.error = true;
-		if (!this.options.stopOnFailure && this.options.autoAdvance) this.runNext();
-		this.fireEvent('failure', arguments);
-	},
-
-	onException: function(){
-		this.error = true;
-		if (!this.options.stopOnFailure && this.options.autoAdvance) this.runNext();
-		this.fireEvent('exception', arguments);
 	}
 
 });
+
+})();
