@@ -174,13 +174,16 @@ pre code {
 }
 
 
-div.upgrade img {
-  display: block;
-  margin: auto;
+p.upgrade img {
+  float: right;
+  border: 1px solid #ccc;
+  margin-bottom:5px;
+  padding:2px;
 }
 
 
 table.differences {
+  clear: right;
   border: 1px solid #555;
 }
 
