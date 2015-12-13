@@ -30,8 +30,8 @@ pid "/tmp/nchapp_unicorn.pid"
 # By default, the Unicorn logger will write to stderr.
 # Additionally, some applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-#stderr_path "/tmp/nchapp_unicorn.stderr.log"
-stdout_path "/var/log/nchapp/nchapp_unicorn.stdout.log"
+stderr_path "/var/log/nchapp/unicorn.stderr.log"
+stdout_path "/var/log/nchapp/unicorn.stdout.log"
 
 # combine Ruby 2.0.0+ with "preload_app true" for memory savings
 preload_app true
