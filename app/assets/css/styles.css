@@ -92,10 +92,12 @@ h1, h2, h3, h4, h5 {
 h1 {
   background-position: 100% 100%;
   font-size: 23px;
+  clear: both;
 }
 h2 {
   background-position: 110% 100%;
   font-size: 20px;
+  clear: both;
 }
 h3{
   background-position: 130% 100%;
@@ -119,7 +121,9 @@ a { color:#009974; }
 a:hover{ background:#EFE; }
 a:active{ color:#0a0; }
 
-
+img.benchmark_graph {
+  float: right;
+}
 
 #configuration-directives + ul {
   padding-left: 10px;
