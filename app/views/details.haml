@@ -42,22 +42,25 @@
    Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 1
-   last requested: 0 sec. ago (-1=never)
+   last requested: 0 sec. ago
    active subscribers: 0
+   last message id: 1449346161:0
   
   > ./pub.rb --response --once --message "msg2" /pub/bigbuffer
    Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 2
-   last requested: 4 sec. ago (-1=never)
+   last requested: 4 sec. ago
    active subscribers: 0
+   last message id: 1449346165:0
   
   > ./pub.rb --response --once --message "msg3" /pub/bigbuffer
    Publishing to http://localhost:80/pub/bigbuffer. 
    202
    queued messages: 3
-   last requested: 10 sec. ago (-1=never)
+   last requested: 10 sec. ago
    active subscribers: 0
+   last message id: 1449346171:0
   
   > ./sub.rb --id /sub/weird_settings                       
    Subscribing 1 longpoll client to http://localhost:80/sub/weird_settings.
@@ -71,8 +74,9 @@
    Publishing to http://localhost:80/pub/nobuffer.
    201
    queued messages: 0
-   last requested: 5 sec. ago (-1=never)
+   last requested: 5 sec. ago
    active subscribers: 0
+   last message id: 1449346793:0
   
   > ./sub.rb --id /sub/weird_settings                         
    Subscribing 1 longpoll client to http://localhost:80/sub/weird_settings.
@@ -83,15 +87,17 @@
    Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 1
-   last requested: 9 sec. ago (-1=never)
+   last requested: 9 sec. ago
    active subscribers: 0
+   last message id: 1449346804:0
   
   > ./pub.rb --response --once --message "another2" /pub/bigbuffer
    Publishing to http://localhost:80/pub/bigbuffer.
    202
    queued messages: 2
-   last requested: 12 sec. ago (-1=never)
+   last requested: 12 sec. ago
    active subscribers: 0
+   last message id: 1449346809:0
   
   > ./sub.rb --id /sub/weird_settings
    Subscribing 1 longpoll client to http://localhost:80/sub/weird_settings.
