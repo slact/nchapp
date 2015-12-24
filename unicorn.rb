@@ -52,14 +52,22 @@ run_once = true
 
 before_fork do |server, worker|
   Queris.disconnect
-
   if run_once
     # do_something_once_here ...
     run_once = false # prevent from firing again
   end
-
 end
 
 after_fork do |server, worker|
   Queris.reconnect
+  
+  if worker.nr + 1 == server.worker_processes 
+    #loaded last worker. kill old unicorn master if necessary
+    begin 
+      oldpid = File.read "#{server.pid}.oldbin"
+      Process.kill(:QUIT, oldpid.to_i)
+    rescue Errno::ENOENT
+      #no problem
+    end
+  end
 end
