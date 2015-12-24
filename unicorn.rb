@@ -35,8 +35,9 @@ stderr_path "/var/log/nchapp/unicorn.stderr.log"
 stdout_path "/var/log/nchapp/unicorn.stdout.log"
 
 # combine Ruby 2.0.0+ with "preload_app true" for memory savings
-# disabled so that app can reloaded with a SIGHUP
-# preload_app true
+preload_app true
+GC.respond_to?(:copy_on_write_friendly=) and
+  GC.copy_on_write_friendly = true
 
 # Enable this flag to have unicorn test client connections by writing the
 # beginning of the HTTP headers before calling the application.  This
