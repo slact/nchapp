@@ -59,7 +59,7 @@ group :development do
   gem "pry-coolline"
   gem "pry-doc"
   gem "pry-remote"
-  gem "pry-rescue"
+  #gem "pry-rescue"
   gem "pry-git"
   gem "pry-theme"
   gem 'pry-debundle'

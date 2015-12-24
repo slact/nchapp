@@ -36,8 +36,8 @@ module Nchapp
     end
 
     if development?
-      use PryRescue::Rack
-      #use BetterErrors::Middleware
+      #use PryRescue::Rack
+      use BetterErrors::Middleware
     end
     #use Rack::Session::Redis
     # must be used after Rack::Session::Cookie
