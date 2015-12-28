@@ -93,7 +93,9 @@ var EventSourceSubscriber = new Class({
   },
   
   cancel: function() {
-    this.listener.close();
+    if(this.listener) {
+      this.listener.close();
+    }
   }
 });
 
@@ -120,11 +122,12 @@ var WebsocketSubscriber = new Class({
       this.fireEvent('error', evt);
       console.log("error", evt);
     }.bind(this);
-    console.log(this.listener);
   },
   
   cancel: function() {
-    this.listener.close();
+    if(this.listener) {
+      this.listener.close();
+    }
   }
 });
 

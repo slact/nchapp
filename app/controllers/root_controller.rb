@@ -21,6 +21,10 @@ class Nchapp::RootController < Nchapp::ApplicationController
     render 'details'
   end
   
+  get '/experiment' do
+    render 'experiment'
+  end
+  
   #404
   any /.*/, [:get, :post, :put, :delete] do
     response.status = 404
