@@ -65,6 +65,11 @@ body {
     right: 5px;
   }
 }
+@media screen and (max-width: 355px){
+  .header div.nginx {
+    left: 230px;
+  }
+}
 
 .header ul.navigation {
   position: relative;
