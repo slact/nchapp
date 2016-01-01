@@ -39,8 +39,31 @@ body {
 .header div.nginx {
   position: absolute;
   z-index: 2;
-  top:20px;
-  right: 0;
+  top:110px;
+  right: 5px;
+}
+
+.header .http2 {
+  position: absolute;
+  z-index: 2;
+  top: 3px; 
+  right: 3px;
+}
+
+@media screen and (max-width: 550px){
+  .header div.nginx {
+    top:30px;
+    right: 100px;
+  }
+}
+
+@media screen and (max-width: 450px){
+  .header .http2 {
+    display: none;
+  }
+  .header div.nginx {
+    right: 5px;
+  }
 }
 
 .header ul.navigation {
