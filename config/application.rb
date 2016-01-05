@@ -48,6 +48,8 @@ module Nchapp
     
     #packages
     use Rack::Static, root: 'gitdir/nchan/dev/package/', urls: ['/pkgs']
+    use Rack::Static, root: 'app/assets/', urls: ['/packages']
+    
   end
 end
 

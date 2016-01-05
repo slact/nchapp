@@ -5,8 +5,8 @@ Rake::TestTask.new do |t|
   t.pattern = 'spec/**/*_spec.rb'
 end
 
-def find_pkg(name, glob)
-Dir.chdir "gitdir/nchan/dev/package/pkgs/" do 
+def find_pkg(dir, name, glob)
+Dir.chdir dir do 
     cp = CompiledPackage.get(name)
     found = Dir.glob(glob).first
     if found
@@ -35,6 +35,9 @@ desc 'rebuild static packages'
 task :repackage do
   build_key = "Nchan:nchapp:nchan_last_build"
   
+  gitdir_pkgs="gitdir/nchan/dev/package/pkgs"
+  prebuilt_pkgs='app/assets/packages'
+  
   ENV['RACK_ENV'] ||= 'development'
   require_relative 'config/application'
   ARGV.clear
@@ -47,12 +50,15 @@ task :repackage do
     puts "new ver:   #{current_commit}"
     puts "should rebuild."
     system "gitdir/nchan/dev/package/repackage.sh"
-    find_pkg :debian, "*.deb"
-    find_pkg :tarball, "*.tar.gz"
+    find_pkg gitdir_pkgs, :debian, "*.deb"
+    find_pkg gitdir_pkgs, :tarball, "*.tar.gz"
     Queris.redis.set build_key, current_commit
   else
     puts "on latest build #{current_commit}"
   end
+  
+  find_pkg prebuilt_pkgs, :'nginx-common', "nginx-common*.deb"
+  find_pkg prebuilt_pkgs, :'nginx-extras', "nginx-extras*.deb"
   
 end
 
