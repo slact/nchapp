@@ -18,13 +18,21 @@ class Nchapp::DownloadController < Nchapp::ApplicationController
   end
   
   get '/nginx-common.deb' do
-    serve_pkg '/packages', :'nginx-common'
+    serve_pkg '/packages', :'nginx-common.deb'
   end
   
   get '/nginx-extras.deb' do
-    serve_pkg '/packages', :'nginx-extras'
+    serve_pkg '/packages', :'nginx-extras.deb'
   end
     
+  get '/nginx-nchan.x86-64.rpm' do
+    serve_pkg '/packages', :'nginx-nchan.rpm'
+  end
+  
+  get '/nginx-nchan.src.rpm' do
+    serve_pkg '/packages', :'nginx-nchan.src.rpm'
+  end
+  
   #404
   any /.*/, [:get, :post, :put, :delete] do
     response.status = 404

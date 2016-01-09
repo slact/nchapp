@@ -6,7 +6,7 @@ Rake::TestTask.new do |t|
 end
 
 def find_pkg(dir, name, glob)
-Dir.chdir dir do 
+  Dir.chdir dir do 
     cp = CompiledPackage.get(name)
     found = Dir.glob(glob).first
     if found
@@ -50,16 +50,18 @@ task :repackage do
     puts "new ver:   #{current_commit}"
     puts "should rebuild."
     system "gitdir/nchan/dev/package/repackage.sh"
-    find_pkg gitdir_pkgs, :debian, "*.deb"
+    #find_pkg gitdir_pkgs, :debian, "*.deb"
     find_pkg gitdir_pkgs, :tarball, "*.tar.gz"
     Queris.redis.set build_key, current_commit
   else
     puts "on latest build #{current_commit}"
   end
   
-  find_pkg prebuilt_pkgs, :'nginx-common', "nginx-common*.deb"
-  find_pkg prebuilt_pkgs, :'nginx-extras', "nginx-extras*.deb"
+  find_pkg prebuilt_pkgs, :'nginx-common.deb', "nginx-common*.deb"
+  find_pkg prebuilt_pkgs, :'nginx-extras.deb', "nginx-extras*.deb"
   
+  find_pkg prebuilt_pkgs, :'nginx-nchan.rpm', "nginx-nchan*.x86_64.rpm"
+  find_pkg prebuilt_pkgs, :'nginx-nchan.src.rpm', "nginx-nchan*.src.rpm"
 end
 
 
