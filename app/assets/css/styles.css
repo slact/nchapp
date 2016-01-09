@@ -153,6 +153,26 @@ img.benchmark_graph {
   float: right;
 }
 
+#packages + ul li {
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 5px;
+}
+
+#packages + ul li:nth-child(1) {
+  list-style: square url('/icons/logo_archlinux.png');
+}
+#packages + ul li:nth-child(2) {
+  list-style: square url('/icons/logo_apple.png');
+}
+#packages + ul li:nth-child(3) {
+  list-style: square url('/icons/logo_debian.png');
+}
+#packages + ul li:nth-child(4) {
+  list-style: square url('/icons/logo_fedora.png');
+}
+
+
 #configuration-directives + ul {
   padding-left: 10px;
   list-style: none;
