@@ -8,7 +8,12 @@ end
 def find_pkg(dir, name, glob)
   Dir.chdir dir do 
     cp = CompiledPackage.get(name)
-    found = Dir.glob(glob).first
+    globs = Dir.glob(glob)
+    if block_given?
+      found = yield globs
+    else
+      found = globs.first
+    end
     if found
       cp.filename = found;
       cp.save
@@ -42,6 +47,17 @@ task :repackage do
   require_relative 'config/application'
   ARGV.clear
   
+  find_pkg prebuilt_pkgs, :'nginx-common.deb', "nginx-common*.deb"
+  find_pkg prebuilt_pkgs, :'nginx-extras.deb', "nginx-extras*.deb" do |ls| 
+    ls.reject! { |f| f =~ /ubuntu/ }
+    ls.first
+  end
+  
+  find_pkg prebuilt_pkgs, :'nginx-extras.ubuntu.deb', "nginx-extras*ubuntu*.deb"
+  
+  find_pkg prebuilt_pkgs, :'nginx-nchan.rpm', "nginx-nchan*.x86_64.rpm"
+  find_pkg prebuilt_pkgs, :'nginx-nchan.src.rpm', "nginx-nchan*.src.rpm"
+  
   last_build=Queris.redis.get build_key
   current_commit=Nchapp::Application.nchan_current_commit
   
@@ -56,12 +72,6 @@ task :repackage do
   else
     puts "on latest build #{current_commit}"
   end
-  
-  find_pkg prebuilt_pkgs, :'nginx-common.deb', "nginx-common*.deb"
-  find_pkg prebuilt_pkgs, :'nginx-extras.deb', "nginx-extras*.deb"
-  
-  find_pkg prebuilt_pkgs, :'nginx-nchan.rpm', "nginx-nchan*.x86_64.rpm"
-  find_pkg prebuilt_pkgs, :'nginx-nchan.src.rpm', "nginx-nchan*.src.rpm"
 end
 
 
