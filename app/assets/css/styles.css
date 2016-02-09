@@ -180,10 +180,14 @@ background-position: 0px 0px;
   background-image: url('/icons/logo_debian.png');
 }
 #packages + ul li:nth-child(4) {
+  background-position: 0px 4px;
+  background-image: url('/icons/logo_ubuntu.png');
+}
+#packages + ul li:nth-child(5) {
   background-position: 0px 2px;
   background-image: url('/icons/logo_fedora.png');
 }
-#packages + ul li:nth-child(5) {
+#packages + ul li:nth-child(6) {
   margin-left:20px;
   padding-left: 0px;
   list-style: square;
