@@ -47,12 +47,16 @@ task :repackage do
   require_relative 'config/application'
   ARGV.clear
   
-  find_pkg prebuilt_pkgs, :'nginx-common.deb', "nginx-common*.deb"
+  find_pkg prebuilt_pkgs, :'nginx-common.deb', "nginx-common*.deb" do |ls|
+    ls.reject! { |f| f =~ /ubuntu/ }
+    ls.first
+  end  
   find_pkg prebuilt_pkgs, :'nginx-extras.deb', "nginx-extras*.deb" do |ls| 
     ls.reject! { |f| f =~ /ubuntu/ }
     ls.first
   end
-  
+
+  find_pkg prebuilt_pkgs, :'nginx-common.ubuntu.deb', "nginx-common*ubuntu*.deb"
   find_pkg prebuilt_pkgs, :'nginx-extras.ubuntu.deb', "nginx-extras*ubuntu*.deb"
   
   find_pkg prebuilt_pkgs, :'nginx-nchan.rpm', "nginx-nchan*.x86_64.rpm"
