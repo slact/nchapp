@@ -25,6 +25,10 @@ class Nchapp::DownloadController < Nchapp::ApplicationController
     serve_pkg '/packages', :'nginx-extras.deb'
   end
   
+  get '/nginx-common.ubuntu.deb' do
+    serve_pkg '/packages', :'nginx-common.ubuntu.deb'
+  end
+  
   get '/nginx-extras.ubuntu.deb' do
     serve_pkg '/packages', :'nginx-extras.ubuntu.deb'
   end
