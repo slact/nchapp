@@ -15,6 +15,18 @@ body {
   min-height:260px;
 }
 
+.announcement {
+  border: 6px solid #f0ec8e;
+  border-radius: 10px;
+  overflow: auto;
+  background: url('http://redisconference.com/wp-content/uploads/2016/03/logo.png') 5px 5px no-repeat;
+  background-color: #fffcc2;
+  padding-left: 200px;
+  min-height: 70px;
+  margin: 5px;
+  font-family: sans-serif;
+  font-size: 110%;
+}
 
 .header img.logo {
   position: absolute;
