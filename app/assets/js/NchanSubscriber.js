@@ -15,12 +15,12 @@ function NchanSubscriber(url, subscriberType) {
     if(!this.transport[subscriberType]) {
       throw "unknown subscriber type " + subscriberType;
     }
-    this.subscriber = new this.transport[subscriberType];
+    this.subscriber = new this.transport[subscriberType](this.emit.bind(this));
   }
   else {
     for(var i in this.transport) {
       try {
-        this.subscriber = new this.transport[i]; //try it
+        this.subscriber = new this.transport[i](this.emit.bind(this)); //try it
         break;
       } catch(err) { /*meh...*/ }
     }
@@ -29,17 +29,22 @@ function NchanSubscriber(url, subscriberType) {
     throw "can't use any subscriber type";
   }
   
-  this.subscriber.on('message', function msg(msg, id) {
-    this.emit('message', msg, id);
-  }.bind(this));
-  this.subscriber.on('error', function fail(code, text) {
-    this.emit('failure', code, text);
-  }.bind(this));
+  this.on('message', function msg(msg, meta) {
+    console.log(msg, meta);
+  });
+  this.on('error', function fail(code, text) {
+    console.log('failure', code, text);
+  });
+  this.on('abort', function fail(code, text) {
+    console.log('abort', code, text);
+  });
   
+  /*
   //explicitly stop just before leaving the page
   ['unload', 'beforeunload'].each(function(ev) {
     window.addEvent(ev, this.stop.bind(this));
   }.bind(this));
+  */
 };
 
 Emitter(NchanSubscriber.prototype);
@@ -59,14 +64,12 @@ NchanSubscriber.prototype.saveState = function() {
 
 NchanSubscriber.prototype.transport = {
   'longpoll': (function () {
-    function Longpoll() {
+    function Longpoll(emit) {
       this.headers = {};
       this.longPollStartTime = null;
       this.maxLongPollTime = 5*60*1000; //5 minutes
-      this.retryDelay = 1000;
+      this.emit = emit;
     }
-    
-    Emitter(Longpoll.prototype);
     
     Longpoll.prototype.listen = function(url) {
       if(this.req) {
@@ -88,31 +91,28 @@ NchanSubscriber.prototype.transport = {
           //legit reply
           var content_type = req.getResponseHeader('Content-Type');
           if (!this.parseMultipartMixedMessage(content_type, response_text, req)) {
-            this.emit("message", response_text, {'content-type': content_type, 'id': this.msgIdFromResponseHeaders(req)});
+            this.emit("message", response_text || "", {'content-type': content_type, 'id': this.msgIdFromResponseHeaders(req)});
           }
           
           this.reqStartTime = new Date().getTime();
           this.req = nanoajax.ajax({url: this.url, headers: this.headers}, requestCallback);
         }
+        else if(code !== null) {
+          //HTTP error
+          this.emit("error", code || 0, response_text);
+          delete this.req;
+        }
         else if(code === null && response_text != "Abort") {
           //an error appears
           console.log("error");
-          this.emit("error", code, response_text);
+          this.emit("error", code || 0, response_text);
           delete this.req;
-          if(this.retryOnError) {
-            setTimeout(function() {
-              this.listen();
-            }.bind(this), this.retryDelay);
-            
-          }
         }
         else {
           //don't care about abortions 
           delete this.req;
           console.log("abort!");
         }
-        
-        console.log(this.req, code, response_text);
       }.bind(this);
       
       this.reqStartTime = new Date().getTime();
@@ -122,23 +122,23 @@ NchanSubscriber.prototype.transport = {
     };
     
     Longpoll.prototype.parseMultipartMixedMessage = function(content_type, text, req) {
-      var m = content_type.match(/^multipart\/mixed;\s+boundary=(.*)$/);
+      var m = content_type && content_type.match(/^multipart\/mixed;\s+boundary=(.*)$/);
       if(!m) { 
         return false;
       }
       var boundary = m[1];
       
-      var msgs = m.split("--" + boundary);
-      if(msgs[0] != "" || msgs[msgs.length] != "--") { throw "weird multipart/mixed split"; }
+      var msgs = text.split("--" + boundary);
+      if(msgs[0] != "" || !msgs[msgs.length-1].match(/--\r?\n/)) { throw "weird multipart/mixed split"; }
       
       msgs = msgs.slice(1, -1);
       for(var i in msgs) {
-        m = msgs[i].match(/(.*)\n\n(.*)/m);
+        m = msgs[i].match(/^(.*)\r?\n\r?\n([\s\S]*)\r?\n$/m);
         var hdrs = m[1].split("\n");
         
         var meta = {};
         for(var j in hdrs) {
-          var hdr = hdrs.match(/^([^:]+):\s+(.*)/);
+          var hdr = hdrs[j].match(/^([^:]+):\s+(.*)/);
           if(hdr && hdr[1] == "Content-Type") {
             meta["content-type"] = hdr[2];
           }
@@ -147,7 +147,7 @@ NchanSubscriber.prototype.transport = {
         if(i == msgs.length - 1) {
           meta["id"] = this.msgIdFromResponseHeaders(req);
         }
-        this.emit('message', msgs[2], meta);
+        this.emit('message', m[2], meta);
       }
       return true;
     };
@@ -178,10 +178,10 @@ NchanSubscriber.prototype.transport = {
   })(),
   
   'eventsource': (function() {
-    function ESWrapper() {
+    function ESWrapper(emit) {
       EventSource;
+      this.emit = emit;
     }
-    Emitter(ESWrapper.prototype);
     
     ESWrapper.prototype.listen= function(url) {
       this.listener = new EventSource(url);
@@ -210,8 +210,9 @@ NchanSubscriber.prototype.transport = {
   })(),
   
   'websocket': (function() {
-    function WSWrapper() {
+    function WSWrapper(emit) {
       WebSocket;
+      this.emit = emit;
     }
     Emitter(WSWrapper.prototype);
     
