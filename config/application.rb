@@ -44,7 +44,7 @@ module Nchapp
     #use Rack::Protection, except: :http_origin
     
     #static resources
-    use Rack::Static, root: 'app/assets/', urls: ['/js', '/css', '/img', '/icons']
+    use Rack::Static, root: 'app/assets/', urls: ['/js', '/css', '/img', '/icons', '/documents']
     
     #packages
     use Rack::Static, root: 'gitdir/nchan/dev/package/', urls: ['/pkgs']
