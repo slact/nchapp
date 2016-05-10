@@ -28,7 +28,10 @@ class Nchapp::RootController < Nchapp::ApplicationController
   get '/redisconf' do
     render 'redisconf2016'
   end
-  
+
+  get '/redisconf2016' do
+    response.redirect '/redisconf'
+  end
   #404
   any /.*/, [:get, :post, :put, :delete] do
     response.status = 404
