@@ -15,8 +15,12 @@ body {
   min-height:260px;
 }
 
-.redisconf {
-  background: url('/img/redisconf2016.png') 5px 5px no-repeat;
+li.redisconf {
+  background: url('/img/redisconf2016.png') 0 0 no-repeat;
+}
+
+li.nginxconf {
+  background: url('/img/nginxconf2016.png') 5px 0 no-repeat;
 }
 
 .announcement {
@@ -24,11 +28,21 @@ body {
   border-radius: 10px;
   overflow: auto;
   background-color: #fffcc2;
-  padding-left: 200px;
   min-height: 70px;
   margin: 5px;
   font-family: sans-serif;
   font-size: 110%;
+}
+ul.announcement {
+  list-style: none;
+  padding-left: 0;
+}
+ul.announcement li {
+  margin-left: 4px;
+  margin-top: 4px;
+  padding-left: 54px;
+  padding-top: 10px;
+  min-height: 30px;
 }
 
 .header img.logo {
