@@ -198,11 +198,12 @@
     upstream my_app {
       server 127.0.0.1:8080;
     }
-    location = /subauth {
-      proxy_pass http://my_app/subscriber_authorize;
+    location = /auth {
+      proxy_pass http://my_app/pubsub_authorize;
       proxy_pass_request_body off;
       proxy_set_header Content-Length "";
       proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
+      proxy_set_header X-Publisher-Type $nchan_publisher_type;
       proxy_set_header X-Prev-Message-Id $nchan_prev_message_id;
       proxy_set_header X-Channel-Id $nchan_channel_id;
       proxy_set_header X-Channel-Id2 $nchan_channel_id2;
@@ -212,19 +213,19 @@
       proxy_set_header X-Forwarded-For $remote_addr;
     }
     
-    location ~ /sub/auth/(\w+)$ {
+    location ~ /pubsub/auth/(\w+)$ {
       nchan_channel_id $1;
-      nchan_authorize_request /subauth;
-      nchan_subscriber;
+      nchan_authorize_request /auth;
+      nchan_pubsub;
       nchan_channel_group test;
     }
   ```
   
-  Here, any request to the subscriber endpoint location `/sub/auth/<...>`
-  will need to be authorized by your application (`my_app`). Nginx will generate a `GET /subscriber_authorize` request to the application, with additional headers set by the `proxy_set_header` directives. Note that Nchan-specific variables are available for this authorization request.
+  Here, any request to the subscriber endpoint location `/pubsub/auth/<...>`
+  will need to be authorized by your application (`my_app`). Nginx will generate a `GET /pubsub_authorize` request to the application, with additional headers set by the `proxy_set_header` directives. Note that Nchan-specific variables are available for this authorization request.
   Once your application receives this request, it should decide whether or not to authorize the subscriber. This can be done based on a forwarded session cookie, IP address, or any set of parameters of your choosing. If authorized, it should respond with an empty `200 OK` response, and the client will be subscribed to the channel. Otherwise, respond with a `403 Forbidden`, and this will be forwarded to the client.
   
-  Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time thy request the next message, which may flood your application with too many authorization requests.
+  Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time they request the next message, which may flood your application with too many authorization requests.
   
   
   #### Authenticate and hide the channel ID with X-Accel-Redirect
