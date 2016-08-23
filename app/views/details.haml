@@ -294,7 +294,8 @@
   %h2="Using Redis"
 :markdown
   [Redis](http://redis.io)
-  can be used to add data persistence and horizontal scalability to your Nchan setup. This is done with the `nchan_redis_url` and `nchan_use_redis` settings:
+  can be used to add data persistence and horizontal scalability to your Nchan setup. 
+  This is done with the `nchan_redis_url` and `nchan_use_redis` settings:
   
   ```nginx
   http {
@@ -332,6 +333,34 @@
   All servers with the above configuration connecting to the same redis server share channel and message data.
   
   All redis-backed publisher and subscriber endpoints [must be configured](#publisher-endpoint-configs) with `nchan_use_redis on;`.
-  Channels that never use redis can be configured side-by-side with redis-backed channels, provided the endpoints never overlap. (This can be ensured, as above, by setting separate `nchan_channel_group`s.)
+  Channels that never use redis can be configured side-by-side with redis-backed channels, provided the endpoints never overlap. (This can be ensured, as above, by setting separate `nchan_channel_group`s.). Different locations can also connect to different Redis servers.
+  
+  Since version 1.0.0, Nchan also supports using Redis Cluster, which adds scalability via sharding channels among cluster nodes. Redis cluster also provides automatic failover, high availability, and eliminates the single point of failure of one shared Redis server. It is configred and used like so:
+  
+  ```nginx
+  http {
+    upstream redis_cluster {
+      nchan_redis_server redis://127.0.0.1:7000;
+      nchan_redis_server redis://127.0.0.1:7001;
+      nchan_redis_server redis://127.0.0.1:7002;
+    }
+    server {
+      listen 80;
+      
+      location ~ /sub/(\w+)$ {
+        nchan_subscriber;
+        nchan_channel_id $1;
+        nchan_redis_pass redis_cluster;
+      }
+      location ~ /pub/(\w+)$ {
+        nchan_publisher;
+        nchan_channel_id $1;
+        nchan_redis_pass redis_cluster;
+      }
+    }
+  } 
+  ```
 
-  Redis-backed channels are a new feature. It's been well-tested, but there may still be bugs if the redis connection is interrupted. Please help test it and report any problems!
+  **All Nchan servers sharing a Redis server or cluster must have their times synchronized (via ntpd or your favorite ntp daemon). Failure to do so will result is missed or duplicate messages.**
+  
+  Redis Cluster support is a new feature. It's fairly well-tested, but there may still be bugs. Please help test it and report any problems!
