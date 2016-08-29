@@ -18,6 +18,24 @@ function insertTableOfContents(tocElSelector) {
   var lastLi;
   var headingsFound = 0;
   
+  var goIn = function() {
+    var ul = lastLi.getFirst('ul');
+    if(!ul) {
+      ul = new Element('ul');
+      lastLi.adopt(ul);
+    }
+    lastUl = ul;
+  };
+  
+  var goOut = function(num) {
+    if(num == 0 || lastUl == toc) {
+      return lastUl;
+    }
+    num--;
+    lastUl = lastUl.getParent().getParent();
+    return goOut(num);
+  };
+  
   var makeLi = function(el) {
     var li = new Element('li');
     li.adopt(new Element('a', {'text': el.get('text'), 'href':"#" + el.get('id')}));
@@ -40,17 +58,13 @@ function insertTableOfContents(tocElSelector) {
         lastUl.adopt(lastLi);
       }
       else if(lvl > lastLevel) {
-        lastUl = new Element('ul');
-        lastLi.adopt(lastUl);
+        goIn();
         lastLi = makeLi(el);
         lastUl.adopt(lastLi);
         lastLevel = lvl;
       }
       else {
-        if(lastUl == toc) {
-          throw "oh no!";
-        }
-        lastUl = lastUl.getParent().getParent();
+        goOut(lastLevel - lvl);
         lastLi = makeLi(el);
         lastUl.adopt(lastLi);
         lastLevel = lvl;
