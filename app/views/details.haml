@@ -2,8 +2,10 @@
 %p
   While Nchan is designed to be straightforward to configure and use, it has its quirks. Some are the result of being a module for a general-purpose web server, some are features that have not yet been implemented, and others are there to expose extra features for the brave developer.
 
-%a#publisher-endpoint-configs(href="#publisher-endpoint-configs")
-  %h2="Publisher Endpoints, Locations, and Configurations"
+.tableOfContents
+  
+%a(href="#publisher-endpoint-configs")
+  %h2#publisher-endpoint-configs="Publisher Endpoints, Locations, and Configurations"
 
 :markdown
   *A channel's configuration is set to the that of its last-used publishing location.*
@@ -119,8 +121,8 @@
   
   You can also can use differently-configured publisher locations to dynamically update a channel's message retention settings. This can be used to erase messages or to scale an existing channel's message retention as desired.
 
-%a#securing-channels(href="#securing-channels")
-  %h2="Securing Channels"
+%a(href="#securing-channels")
+  %h2#securing-channels="Securing Channels"
 :markdown
   ### Securing Publisher Endpoints
   Consider the use case of an application where authenticated users each use a private, dedicated channel for live updates. The configuration might look like this:
@@ -290,8 +292,8 @@
   
   This method is especially useful for EventSource and Websocket subscribers. Long-Polling subscribers will need to be re-authenticated for every new message, which may flood your application with too many authentication requests.
 
-%a#using-redis(href="#using-redis")
-  %h2="Using Redis"
+%a(href="#using-redis")
+  %h2#using-redis="Using Redis"
 :markdown
   [Redis](http://redis.io)
   can be used to add data persistence and horizontal scalability to your Nchan setup. This is done with the `nchan_redis_url` and `nchan_use_redis` settings:
