@@ -296,8 +296,10 @@
   %h2#using-redis="Using Redis"
 :markdown
   [Redis](http://redis.io)
-  can be used to add data persistence and horizontal scalability to your Nchan setup. 
-  This is done with the `nchan_redis_url` and `nchan_use_redis` settings:
+  can be used to add **data persistence** and **horizontal scalability** to your Nchan setup. 
+  
+  ### Connecting to a Redis Server
+  To connect to a single Redis master server, use the `nchan_redis_url` and `nchan_use_redis` settings:
   
   ```nginx
   http {
@@ -337,7 +339,9 @@
   All redis-backed publisher and subscriber endpoints [must be configured](#publisher-endpoint-configs) with `nchan_use_redis on;`.
   Channels that never use redis can be configured side-by-side with redis-backed channels, provided the endpoints never overlap. (This can be ensured, as above, by setting separate `nchan_channel_group`s.). Different locations can also connect to different Redis servers.
   
-  Since version 1.0.0, Nchan also supports using Redis Cluster, which adds scalability via sharding channels among cluster nodes. Redis cluster also provides automatic failover, high availability, and eliminates the single point of failure of one shared Redis server. It is configred and used like so:
+  
+  ### Redis Cluster
+  Since version 1.0.0, Nchan also supports using Redis Cluster, which adds scalability via sharding channels among cluster nodes. Redis cluster also provides **automatic failover**, **high availability**, and eliminates the single point of failure of one shared Redis server. It is configred and used like so:
   
   ```nginx
   http {
@@ -345,6 +349,8 @@
       nchan_redis_server redis://127.0.0.1:7000;
       nchan_redis_server redis://127.0.0.1:7001;
       nchan_redis_server redis://127.0.0.1:7002;
+      # you don't need to specify all the nodes, they will be autodiscovered
+      # however, it's recommended that you do specify at least a few master nodes.
     }
     server {
       listen 80;
@@ -363,6 +369,10 @@
   } 
   ```
 
-  **All Nchan servers sharing a Redis server or cluster must have their times synchronized (via ntpd or your favorite ntp daemon). Failure to do so will result in missed or duplicate messages.**
+  #### High Availability
+  Redis Cluster connections are designed to be resilient and try to recover from errors. Interrupted connections will have their commands queued until reconnection, and Nchan will publish any messages missed while disconnected. Nchan is also adaptive to cluster modifications. It will add new nodes and remove them as needed.
+  
+  
+  **All Nchan servers sharing a Redis server or cluster must have their times synchronized (via ntpd or your favorite ntp daemon). Failure to do so may result in missed or duplicate messages.**
   
   Redis Cluster support is a new feature. It's fairly well-tested, but there may still be bugs. Please help test it and report any problems!
