@@ -242,11 +242,11 @@ img.benchmark_graph {
   float: right;
 }
 
-#packages + ul {
+#download-packages + ul {
   padding-left: 20px;
 }
 
-#packages + ul li {
+#download-packages + ul li {
   margin-top: 0px;
   padding-top: 0px;
   padding-bottom: 7px;
@@ -256,27 +256,27 @@ img.benchmark_graph {
   list-style: none;
 }
 
-#packages + ul li:nth-child(1) {
+#download-packages + ul li:nth-child(1) {
   background-position: 0px 1px;
   background-image: url('/icons/logo_archlinux.png');
 }
-#packages + ul li:nth-child(2) {
+#download-packages + ul li:nth-child(2) {
 background-position: 0px 0px;
   background-image: url('/icons/logo_apple.png');
 }
-#packages + ul li:nth-child(3) {
+#download-packages + ul li:nth-child(3) {
   background-position: 0px 4px;
   background-image: url('/icons/logo_debian.png');
 }
-#packages + ul li:nth-child(4) {
+#download-packages + ul li:nth-child(4) {
   background-position: 0px 4px;
   background-image: url('/icons/logo_ubuntu.png');
 }
-#packages + ul li:nth-child(5) {
+#download-packages + ul li:nth-child(5) {
   background-position: 0px 2px;
   background-image: url('/icons/logo_fedora.png');
 }
-#packages + ul li:nth-child(6) {
+#download-packages + ul li:nth-child(6) {
   margin-left:20px;
   padding-left: 0px;
   list-style: square;
