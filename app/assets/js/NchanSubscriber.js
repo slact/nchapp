@@ -20,18 +20,18 @@
  * 
  * sub.on('connect', function(evt) {
  *   //fired when first connected. 
- * }
+ * });
  * 
  * sub.on('disconnect', function(evt) {
  *   // when disconnected.
- * }
+ * });
  * 
  * sub.on('error', function(code, message) {
  *   //error callback. not sure about the parameters yet
- * }
+ * });
  * 
  * sub.reconnect; // should subscriber try to reconnect? true by default.
- * sub.reconnectTimeout; //how long to wait to reconnect? does not apply to EventSource
+ * sub.reconnectTimeout; //how long to wait to reconnect? does not apply to EventSource, which reconnects on its own.
  * sub.lastMessageId; //last message id. useful for resuming a connection without loss or repetition.
  * 
  * sub.start(); // begin (or resume) subscribing
@@ -429,7 +429,7 @@ NchanSubscriber.prototype.start = function() {
         if(ev.key == this.sharedKeys.status) {
           if(ev.newValue == "disconnected") {
             if(this.sharedRole == "slave") {
-              //play the promotion lotery
+              //play the promotion lottery
               //console.log("status changed to disconnected, maybepromotetomaster", ev.newValue, ev.oldValue);
               this.maybePromoteToMaster();
             }
