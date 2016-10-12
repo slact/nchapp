@@ -12,7 +12,7 @@ gem 'redcarpet'
 gem 'pygments.rb'
 
 gem 'git'
-gem 'fpm', :github => "slact/fpm"
+gem 'fpm', :git => "https://github.com/slact/fpm.git"
 
 #rack stuff
 gem 'warden'
@@ -36,16 +36,16 @@ gem "redd"
 gem 'hiredis'
 gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 
-gem 'queris', :github => "slact/queris"
+gem 'queris', git: "https://github.com/slact/queris.git"
 
-gem 'hobbit', github: 'slact/hobbit'
+gem 'hobbit', git: 'https://github.com/slact/hobbit.git'
 #if File.directory?(queris_path= File.expand_path("../hobbit"))
 #  gem 'hobbit', :path => queris_path
 #else
 #  gem 'hobbit', github: 'slact/hobbit'
 #end
 
-gem 'hobbit-contrib', github: 'slact/hobbit-contrib', require: 'hobbit/contrib'
+gem 'hobbit-contrib', git: 'https://github.com/slact/hobbit-contrib.git', require: 'hobbit/contrib'
 gem 'i18n'
 gem 'rack-protection'
 # Uncomment this if you want to use Sass
