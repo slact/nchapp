@@ -25,12 +25,19 @@ class Nchapp::RootController < Nchapp::ApplicationController
     render 'experiment'
   end
   
-  get '/redisconf' do
-    render 'redisconf2016'
+  get '/nginxconf' do
+    response.redirect '/nginxconf2016'
   end
-
+  get '/nginxconf2016' do
+    render 'nginxconf2016'
+  end
+    
+  
+  get '/redisconf' do
+    response.redirect '/redisconf2016'
+  end
   get '/redisconf2016' do
-    response.redirect '/redisconf'
+    render 'redisconf2016'
   end
   #404
   any /.*/, [:get, :post, :put, :delete] do
