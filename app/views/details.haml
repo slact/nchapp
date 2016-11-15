@@ -191,45 +191,6 @@
   
   An ID that can be guessed is an ID that can be hijacked. If you are not authenticating subscribers (as described below), a channel ID should be impossible to guess. Use at least 128 bits of entropy to generate a random token, associate it with the authenticated user, and share it only with the user's client. Do not reuse tokens, just as you would not reuse session IDs.
   
-  #### Authenticate with `nchan_authorize_request`
-  
-  This method behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
-  
-  Consider the configuration:
-  ```nginx
-    upstream my_app {
-      server 127.0.0.1:8080;
-    }
-    location = /auth {
-      proxy_pass http://my_app/pubsub_authorize;
-      proxy_pass_request_body off;
-      proxy_set_header Content-Length "";
-      proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
-      proxy_set_header X-Publisher-Type $nchan_publisher_type;
-      proxy_set_header X-Prev-Message-Id $nchan_prev_message_id;
-      proxy_set_header X-Channel-Id $nchan_channel_id;
-      proxy_set_header X-Channel-Id2 $nchan_channel_id2;
-      proxy_set_header X-Channel-Id3 $nchan_channel_id3;
-      proxy_set_header X-Channel-Id4 $nchan_channel_id4;
-      proxy_set_header X-Original-URI $request_uri;
-      proxy_set_header X-Forwarded-For $remote_addr;
-    }
-    
-    location ~ /pubsub/auth/(\w+)$ {
-      nchan_channel_id $1;
-      nchan_authorize_request /auth;
-      nchan_pubsub;
-      nchan_channel_group test;
-    }
-  ```
-  
-  Here, any request to the subscriber endpoint location `/pubsub/auth/<...>`
-  will need to be authorized by your application (`my_app`). Nginx will generate a `GET /pubsub_authorize` request to the application, with additional headers set by the `proxy_set_header` directives. Note that Nchan-specific variables are available for this authorization request.
-  Once your application receives this request, it should decide whether or not to authorize the subscriber. This can be done based on a forwarded session cookie, IP address, or any set of parameters of your choosing. If authorized, it should respond with an empty `200 OK` response, and the client will be subscribed to the channel. Otherwise, respond with a `403 Forbidden`, and this will be forwarded to the client.
-  
-  Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time they request the next message, which may flood your application with too many authorization requests.
-  
-  
   #### Authenticate and hide the channel ID with X-Accel-Redirect
 
   This method uses the [X-Accel feature](https://www.nginx.com/resources/wiki/start/topics/examples/x-accel) of Nginx upstream proxies to perform an internal request to a subscriber endpoint.
@@ -292,6 +253,80 @@
   
   This method is especially useful for EventSource and Websocket subscribers. Long-Polling subscribers will need to be re-authenticated for every new message, which may flood your application with too many authentication requests.
 
+%a(href="#application-callbacks")
+  %h2#application-callbacks="Callbacks, hooks, and Application Integration"
+:markdown
+  There are several ways an application can interface with Nchan during the publishing and subscribing process:
+  
+  ### Request Authorization
+  
+  This method behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
+  
+  Consider the configuration:
+  ```nginx
+    upstream my_app {
+      server 127.0.0.1:8080;
+    }
+    location = /auth {
+      proxy_pass http://my_app/pubsub_authorize;
+      proxy_pass_request_body off;
+      proxy_set_header Content-Length "";
+      proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
+      proxy_set_header X-Publisher-Type $nchan_publisher_type;
+      proxy_set_header X-Prev-Message-Id $nchan_prev_message_id;
+      proxy_set_header X-Channel-Id $nchan_channel_id;
+      proxy_set_header X-Original-URI $request_uri;
+      proxy_set_header X-Forwarded-For $remote_addr;
+    }
+    
+    location ~ /pubsub/auth/(\w+)$ {
+      nchan_channel_id $1;
+      nchan_authorize_request /auth;
+      nchan_pubsub;
+      nchan_channel_group test;
+    }
+  ```
+  
+  Here, any request to the location `/pubsub/auth/<...>`
+  will need to be authorized by your application (`my_app`). Nginx will generate a `GET /pubsub_authorize` request to the application, with additional headers set by the `proxy_set_header` directives. Note that Nchan-specific variables are available for this authorization request.
+  Once your application receives this request, it should decide whether or not to authorize the subscriber. This can be done based on a forwarded session cookie, IP address, or any set of parameters of your choosing. If authorized, it should respond with an empty `200 OK` response, and the client will be subscribed to the channel. Otherwise, respond with a `403 Forbidden`, and this will be forwarded to the client.
+  
+  Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time they request the next message, which may flood your application with too many authorization requests.
+
+  
+  ### Subsribe and Unsubscribe callbacks
+  
+  Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the `nchan_subscribe_request` and `nchan_unsubscribe_request` settings. These should point to Nginx locations configured to forward requests to an upstream proxy (your application):
+  
+  ```
+    location ~ /sub/(\w+)$ {
+      nchan_channel_id $1;
+      nchan_subscribe_request /upstream/sub;
+      nchan_unsubscribe_request /upstream/unsub;
+      nchan_subscriber;
+      nchan_channel_group test;
+    }
+
+    location = /upstream/unsub {
+      proxy_pass http://127.0.0.1:8053/unsub;
+      proxy_ignore_client_abort on;  #!!!important!!!!
+      proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
+      proxy_set_header X-Channel-Id $nchan_channel_id;
+      proxy_set_header X-Original-URI $request_uri;
+    } 
+    location = /upstream/sub {
+      proxy_pass http://127.0.0.1:8053/sub;
+      proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
+      proxy_set_header X-Message-Id $nchan_message_id;
+      proxy_set_header X-Channel-Id $nchan_channel_id;
+      proxy_set_header X-Original-URI $request_uri;
+    } 
+  ```
+  
+  In order for `nchan_unsubscribe_request` to work correctly, the location it points to must have `proxy_ignore_client_abort on;`. Otherwise, suddenly abborted subscribers may not trigger an unsubscribe request.
+  
+  Note that the subscribe/unsubscribe hooks are **disabled for long-poll and interval-poll clients**, because they would trigger these hooks each time they receive a message.
+  
 %a(href="#using-redis")
   %h2#using-redis="Using Redis"
 :markdown
