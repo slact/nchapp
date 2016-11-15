@@ -376,7 +376,39 @@ p.footnote {
   font-size: 80%;
 }
 
+.relevant-directives {
+  font-size: 80%;
+  color: #444;
+  border-left: 1px solid #555;
+  border-right: 1px solid #555;
+  border-radius: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 0.4em;
+  margin-right:0.4em;
+  background-color: #f0f5ff;
+}
+.relevant-directives a.directive {
+  font-family: monospace;
+  color: #454;
+}
 
+table.nchan-stub-status {
+  border-collapse: collapse;
+  border: 1px solid #555;
+  text-align: left;
+}
+table.nchan-stub-status td p {
+  margin: 0;
+}
+table.nchan-stub-status td, table.nchan-stub-status th {
+  border: 1px solid #888;
+}
+table.nchan-stub-status th {
+  background-color: #ededed;
+  font-family: monospace;
+  white-space: pre;
+}
 
 
 

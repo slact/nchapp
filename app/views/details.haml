@@ -254,7 +254,7 @@
   This method is especially useful for EventSource and Websocket subscribers. Long-Polling subscribers will need to be re-authenticated for every new message, which may flood your application with too many authentication requests.
 
 %a(href="#application-callbacks")
-  %h2#application-callbacks="Callbacks, hooks, and Application Integration"
+  %h2#application-callbacks="Callbacks, Hooks, and Application Integration"
 :markdown
   There are several ways an application can interface with Nchan during the publishing and subscribing process:
   
@@ -294,7 +294,7 @@
   Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time they request the next message, which may flood your application with too many authorization requests.
 
   
-  ### Subsribe and Unsubscribe callbacks
+  ### Subsribe and Unsubscribe Callbacks
   
   Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the `nchan_subscribe_request` and `nchan_unsubscribe_request` settings. These should point to Nginx locations configured to forward requests to an upstream proxy (your application):
   
@@ -308,14 +308,14 @@
     }
 
     location = /upstream/unsub {
-      proxy_pass http://127.0.0.1:8053/unsub;
+      proxy_pass http://127.0.0.1:9292/unsub;
       proxy_ignore_client_abort on;  #!!!important!!!!
       proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
       proxy_set_header X-Channel-Id $nchan_channel_id;
       proxy_set_header X-Original-URI $request_uri;
     } 
     location = /upstream/sub {
-      proxy_pass http://127.0.0.1:8053/sub;
+      proxy_pass http://127.0.0.1:9292/sub;
       proxy_set_header X-Subscriber-Type $nchan_subscriber_type;
       proxy_set_header X-Message-Id $nchan_message_id;
       proxy_set_header X-Channel-Id $nchan_channel_id;
@@ -326,6 +326,34 @@
   In order for `nchan_unsubscribe_request` to work correctly, the location it points to must have `proxy_ignore_client_abort on;`. Otherwise, suddenly abborted subscribers may not trigger an unsubscribe request.
   
   Note that the subscribe/unsubscribe hooks are **disabled for long-poll and interval-poll clients**, because they would trigger these hooks each time they receive a message.
+  
+  ### Message Publishing Callbacks
+  
+  Messages can be sent to an upstream application before being published using the `nchan_publisher_upstream_request` setting:
+  
+  ```nginx
+    location ~ /pub/(\w+)$ {
+      #publisher endpoint
+      nchan_channel_id $1;
+      nchan_pubsub;
+      nchan_publisher_upstream_request /upstream_pub;
+    }
+    
+    location = /upstream_pub {
+      proxy_pass http://127.0.0.1:9292/pub;
+      proxy_set_header X-Publisher-Type $nchan_publisher_type;
+      proxy_set_header X-Prev-Message-Id $nchan_prev_message_id;
+      proxy_set_header X-Channel-Id $nchan_channel_id;
+      proxy_set_header X-Original-URI $request_uri;
+    } 
+  ```
+  With this configuration, incoming messages are first `POST`ed to `http://127.0.0.1:9292/pub`.
+  The upstream response code determines how publishing will proceed:
+    - `304 Not Modified` publishes the message as received, without modifification.
+    - `204 No Content` discards the message
+    - `200 OK` is used for modifying the message. Instead of the original incoming message, the message contained in this HTTP response is published.
+  
+  There are two main use cases for `nchan_publisher_upstream_request`: forwarding incoming data from Websocket publishers to an application, and mutating incoming messages.
   
 %a(href="#using-redis")
   %h2#using-redis="Using Redis"
@@ -411,3 +439,146 @@
   **All Nchan servers sharing a Redis server or cluster must have their times synchronized (via ntpd or your favorite ntp daemon). Failure to do so may result in missed or duplicate messages.**
   
   Redis Cluster support is a new feature. It's fairly well-tested, but there may still be bugs. Please help test it and report any problems!
+  
+%a(href="#introspection")
+  %h2#using-redis="Introspection"
+%p
+  :markdown
+
+    There are several ways to see what's happening inside Nchan. These are useful for debugging application integration and for measuring performance.
+    
+    ### Channel Events
+    
+    Channel events are messages automatically published by Nchan when certain events occur in a channel. These are very useful for debugging the use of channels. However, they carry a significant performance overhead and should be used during development, and not inproduction.
+    
+    Channel events are published to special 'meta' channels associated with normal channels. Here's how to configure them:
+    
+    ```nginx
+    location ~ /pubsub/(.+)$ {
+      nchan_pubsub;
+      nchan_channel_id $1;
+      nchan_channel_events_channel_id $1; #enables channel events for this location
+    }
+    
+    location ~ /channel_events/(.+) {
+      #channel events subscriber location
+      nchan_subscriber;
+      nchan_channel_group meta; #"meta" is a SPECIAL channel group
+      nchan_channel_id $1;
+    }
+    ```
+    
+    Note the `/channel_events/...`
+    has a *special* `nchan_channel_group`, `meta`. This group is reserved for accessing "channel events channels", or"metachannels".
+    
+    Now, say I subscribe to `/channel_events/foo` I will refer to this as the channel events subscriber.
+    
+    Let's see what this channel events subscriber receives when I publish messages to 
+    
+    Subscribing to `/pubsub/foo` produces the channel event
+    ```
+    subscriber_enqueue foo
+    ```
+    
+    Publishing a message to `/pubsub/foo`:
+    ```
+    channel_publish foo
+    ```
+    
+    Unsubscribing from `/pubsub/foo`:
+    ```
+    subscriber_dequeue foo
+    ```
+    
+    Deleting `/pubsub/foo` (with HTTP `DELETE /pubsub/foo`):
+    ```
+    channel_delete foo
+    ```
+    
+    The event string itself is configirable with [nchan_channel_event_string](/#nchan_channel_event_string). By default, it is set to `$nchan_channel_event $nchan_channel_id`. 
+    This string can use any Nginx and [Nchan variables](/$variables).
+
+    
+    ### nchan_stub_status
+    
+    Like Nginx's [stub_status](https://nginx.org/en/docs/http/ngx_http_stub_status_module.html),
+    `nchan_stub_status` is used to get performance metrics.
+    
+    ```nginx
+      location /nchan_stub_status {
+        nchan_stub_status;
+      }
+    ```
+    
+    Sending a GET request to this location produces the response:
+    
+    ```text
+    total published messages: 1906
+    stored messages: 1249
+    shared memory used: 1824K
+    channels: 80
+    subscribers: 90
+    redis pending commands: 0
+    redis connected servers: 0
+    total interprocess alerts received: 1059634
+    interprocess alerts in transit: 0
+    interprocess queued alerts: 0
+    total interprocess send delay: 0
+    total interprocess receive delay: 0
+    ```
+    
+    Here's what each line means, and how to interpret it:
+
+%table.nchan-stub-status
+  %tr
+    %th="total published messages"
+    %td="Number of messages published to all channels through this Nchan server."
+  %tr
+    %th="stored messages"
+    %td="Number of messages currently buffered in memory"
+  %tr
+    %th="shared memory used"
+    %td
+      :markdown
+        Total shared memory used for buffering messages, storing channel information, and other purposes. This value should be comfortably below `nchan_max_reserved_memory`.
+  %tr
+    %th="channels"
+    %td="Number of channels present on this Nchan server."
+  %tr
+    %th="subscribers"
+    %td="Number of subscribers to all channels on this Nchan server."
+  %tr
+    %th="redis pending commands"
+    %td="Number of commands sent to Redis that are awaiting a reply. May spike during high load, especially if the Redis server is overloaded. Should tend towards 0."
+  %tr
+    %th="redis connected servers"
+    %td="Number of redis servers to which Nchan is currently connected."
+  %tr
+    %th="total interprocess alerts received"
+    %td="Number of interprocess communication packets transmitted between Nginx workers processes for Nchan. Can grow at 100-10000 per second at high load."
+  %tr
+    %th="interprocess alerts in transit"
+    %td="Number of interprocess communication packets in transit between Nginx workers. May be nonzero during high load, but should always tend toward 0 over time."
+  %tr
+    %th="interprocess queued alerts"
+    %td="Number of interprocess communication packets waiting to be sent. May be nonzero during high load, but should always tend toward 0 over time."
+  %tr
+    %th="total interprocess send delay"
+    %td="Total amount of time interprocess communication packets spend being queued if delayed. May increase during high load."
+  %tr
+    %th="total interprocess receive delay"
+    %td="Total amount of time interprocess communication packets spend in transit if delayed. May increase during high load."
+
+:markdown
+  Additionally, when there is at least one `nchan_stub_status` location, the following Nginx variables are available:
+  - `$nchan_stub_status_total_published_messages`  
+  - `$nchan_stub_status_stored_messages`  
+  - `$nchan_stub_status_shared_memory_used`  
+  - `$nchan_stub_status_channels`  
+  - `$nchan_stub_status_subscribers`  
+  - `$nchan_stub_status_redis_pending_commands`  
+  - `$nchan_stub_status_redis_connected_servers`  
+  - `$nchan_stub_status_total_ipc_alerts_received`  
+  - `$nchan_stub_status_ipc_queued_alerts`  
+  - `$nchan_stub_status_total_ipc_send_delay`  
+  - `$nchan_stub_status_total_ipc_receive_delay`  
