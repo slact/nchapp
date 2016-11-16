@@ -260,7 +260,7 @@
   
   ### Request Authorization
   
-  This method, configured with (`nchan_authorize_request`)[/#nchan_authorize_request],
+  This method, configured with [`nchan_authorize_request`](/#nchan_authorize_request),
   behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
   
   Consider the configuration:
@@ -297,8 +297,8 @@
   
   ### Subsribe and Unsubscribe Callbacks
   
-  Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the (`nchan_subscribe_request`)[/#nchan_unsubscribe_request]
-  and (`nchan_unsubscribe_request`)[/#nchan_unsubscribe_request] settings. 
+  Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the [`nchan_subscribe_request`](/#nchan_subscribe_request)
+  and [`nchan_unsubscribe_request`](/#nchan_unsubscribe_request) settings. 
   These should point to Nginx locations configured to forward requests to an upstream proxy (your application):
   
   ```nginx
