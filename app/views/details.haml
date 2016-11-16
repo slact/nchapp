@@ -260,7 +260,8 @@
   
   ### Request Authorization
   
-  This method behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
+  This method, configured with (`nchan_authorize_request`)[/#nchan_authorize_request],
+  behaves just like the Nginx [http_auth_request module](http://nginx.org/en/docs/http/ngx_http_auth_request_module.html#auth_request_set).
   
   Consider the configuration:
   ```nginx
@@ -289,14 +290,16 @@
   
   Here, any request to the location `/pubsub/auth/<...>`
   will need to be authorized by your application (`my_app`). Nginx will generate a `GET /pubsub_authorize` request to the application, with additional headers set by the `proxy_set_header` directives. Note that Nchan-specific variables are available for this authorization request.
-  Once your application receives this request, it should decide whether or not to authorize the subscriber. This can be done based on a forwarded session cookie, IP address, or any set of parameters of your choosing. If authorized, it should respond with an empty `200 OK` response, and the client will be subscribed to the channel. Otherwise, respond with a `403 Forbidden`, and this will be forwarded to the client.
+  Once your application receives this request, it should decide whether or not to authorize the subscriber. This can be done based on a forwarded session cookie, IP address, or any set of parameters of your choosing. If authorized, it should respond with an empty `200 OK` response. Otherwise, respond with a `403 Forbidden`, which this will be forwarded to the client and the requested action will be aborted.
   
-  Note that Websocket and EventSource clients will only try to authorize during the first handshake request, and Long-Poll and Interval-Poll subscribers will need to be authorized each time they request the next message, which may flood your application with too many authorization requests.
+  Note that Websocket and EventSource clients will only try to authorize during the initial handshake request, whereas Long-Poll and Interval-Poll subscribers will need to be authorized each time they request the next message, which may flood your application with too many authorization requests.
 
   
   ### Subsribe and Unsubscribe Callbacks
   
-  Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the `nchan_subscribe_request` and `nchan_unsubscribe_request` settings. These should point to Nginx locations configured to forward requests to an upstream proxy (your application):
+  Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the (`nchan_subscribe_request`)[/#nchan_unsubscribe_request]
+  and (`nchan_unsubscribe_request`)[/#nchan_unsubscribe_request] settings. 
+  These should point to Nginx locations configured to forward requests to an upstream proxy (your application):
   
   ```nginx
     location ~ /sub/(\w+)$ {
