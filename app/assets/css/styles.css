@@ -391,6 +391,7 @@ p.footnote {
 .relevant-directives a.directive {
   font-family: monospace;
   color: #454;
+  text-decoration: none;
 }
 
 table.nchan-stub-status {
