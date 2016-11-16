@@ -326,7 +326,7 @@
     } 
   ```
   
-  In order for `nchan_unsubscribe_request` to work correctly, the location it points to must have `proxy_ignore_client_abort on;`. Otherwise, suddenly abborted subscribers may not trigger an unsubscribe request.
+  In order for `nchan_unsubscribe_request` to work correctly, the location it points to must have `proxy_ignore_client_abort on;`. Otherwise, suddenly aborted subscribers may not trigger an unsubscribe request.
   
   Note that the subscribe/unsubscribe hooks are **disabled for long-poll and interval-poll clients**, because they would trigger these hooks each time they receive a message.
   
