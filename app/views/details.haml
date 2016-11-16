@@ -298,7 +298,7 @@
   
   Subscribers can report to an application when they have swubscribed and unsubscribed to a channel using the `nchan_subscribe_request` and `nchan_unsubscribe_request` settings. These should point to Nginx locations configured to forward requests to an upstream proxy (your application):
   
-  ```
+  ```nginx
     location ~ /sub/(\w+)$ {
       nchan_channel_id $1;
       nchan_subscribe_request /upstream/sub;
