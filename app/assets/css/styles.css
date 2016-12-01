@@ -36,6 +36,7 @@ li.nginxconf {
   
   margin-left: 5%;
   margin-right: 5%;
+  margin-bottom: 2em;
   
 }
 ul.announcement {
@@ -105,6 +106,19 @@ ul.announcement li {
   }
 }
 
+
+@media screen and (max-width: 800px){
+.pageLayout {
+    display: block !important;
+  }
+  .page {
+    display: block !important;
+  }
+  .sidebar {
+    display: none !important; 
+  }
+}
+
 .header ul.navigation {
   position: relative;
   z-index: 1;
@@ -130,14 +144,23 @@ ul.navigation a {
 a.github{
   color:black;
 }
+.pageLayout {
+  display:table;
+  table-layout:fixed;
+  margin: 0;
+  margin-left: 7%;
+  margin-right: 2%;
+}
 
-.page, .footer {
+.footer {
   margin: 0 10px 0 10px;
 }
 
 .page {
-  margin-left: 7%;
-  margin-right: 7%;
+  margin: 0;
+  display: table-cell;;
+  min-width: 100px;
+  padding-right: 20px;
 }
 
 .page img.logo {
@@ -147,7 +170,6 @@ a.github{
 img {
   border:0;
 }
-
 
 h1, h2, h3, h4, h5 {
   color: #009974;
@@ -160,12 +182,12 @@ h1, h2, h3, h4, h5 {
 h1 {
   background-position: 100% 100%;
   font-size: 23px;
-  clear: both;
+  clear: right;
 }
 h2 {
   background-position: 110% 100%;
   font-size: 20px;
-  clear: both;
+  clear: right;
 }
 h3{
   background-position: 130% 100%;
@@ -180,34 +202,43 @@ h5{
   font-size: 14px;
 }
 
+.sidebar {
+  display: table-cell;
+}
 
 
 div.tableOfContents {
   border: 1px solid #aaaaaa;
+  border-radius: 7px;
   background: #f9f9f9;
-  display: table;
   position: relative;
   top: 0;
   left: 0;
+  width: 200px;
+  margin-left: 30px;
+}
+
+.page div.tableOfContents {
   min-width: 250px;
+  float: none;
 }
 
 .tableOfContentsHidden ul.tableOfContents {
   display: none;
 }
 
-.tableOfContents a.toggle {
+.page .tableOfContents a.toggle {
   display: block;
   position: absolute;
   top: 2px;
   right: 2px;
   font-size: 70%;
 }
-.tableOfContents a.toggle:before {
+.page .tableOfContents a.toggle:before {
   content: "[ hide ]";
 }
 
-.tableOfContentsHidden a.toggle:before {
+.page .tableOfContentsHidden a.toggle:before {
   content: "[ show ]";
 }
 
@@ -337,6 +368,10 @@ code, pre {
   margin:0;
   padding:0;
   text-indent: 0;
+}
+
+pre {
+  white-space: pre-wrap;
 }
 
 pre code {
@@ -491,75 +526,10 @@ div.beg img {
   border:0;
 }
 
-div.chat {
-  position:fixed;
-  z-index:0;
-  right:0.3em;
-  top:0.3em;
-  height:17em;
-  border:3px solid #ddd;
-  background: #f6f6ff;
-  text-align:left;
-  font-family: sans-serif;
-  width:220px;
-}
 
-.chat ul {
-  overflow:auto;
-  height:16em;
-  list-style: none;
-  padding:0.1em;
-  margin:0.1em;
-  font-size:95%;
-  border:1px solid #DDD;
-  background: #Fcfcfc;
+.fixed {
+  position: fixed !important;
 }
-
-.chat li {
-  margin-bottom:0.2em;
-}
-
-.chat li.notice {
-  color:#666;
-  padding-left:0.1em;
-}
-.chat li.message {
-  color: black;
-}
-.chat li.iSay {
-  color: #0002AF;
-}
-.chat form {
-  white-space: nowrap;
-  font-size:70%;
-  text-align:right;
-  margin:0 0.2em 0 0.2em;
-}
-.chat input {
-  font-size:100%;
-}
-.chat input.submit {
-  display:none;
-}
-.chat input.message {
-  margin:0;
-  color:#0002AF;
-  border:2px solid #DDD;
-  width:12.5em;
-  
-}
-.chat input.username {
-  float:left;
-  display:inline;
-  border:0;
-  width:5em;
-  margin-left:0.1em;
-  background: transparent;
-  color:#0002AF;
-}
-
-
-
 
 
 

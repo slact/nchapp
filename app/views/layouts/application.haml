@@ -61,7 +61,10 @@
         %a(href="http://redisconference.com/")="Redisconf 2016"
         %a(href="/redisconf")="available here"
     
-    #page.page=yield
+    .pageLayout
+      #page.page=yield
+      .sidebar
+        .tableOfContents
     
     .footer
       %h2="Contact"
