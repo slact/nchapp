@@ -2,7 +2,6 @@
 
 function insertTableOfContents(tocElSelector, pageElSelector) {
   var tocContainer = document.getElement(tocElSelector);
-  console.log(tocContainer);
   if(!tocContainer) {
     return;
   }
