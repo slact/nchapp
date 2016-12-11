@@ -59,8 +59,8 @@ task :repackage do
   find_pkg prebuilt_pkgs, :'nginx-common.ubuntu.deb', "nginx-common*ubuntu*.deb"
   find_pkg prebuilt_pkgs, :'nginx-extras.ubuntu.deb', "nginx-extras*ubuntu*.deb"
   
-  find_pkg prebuilt_pkgs, :'nginx-nchan.rpm', "nginx-nchan*.x86_64.rpm"
-  find_pkg prebuilt_pkgs, :'nginx-nchan.src.rpm', "nginx-nchan*.src.rpm"
+  find_pkg prebuilt_pkgs, :'nginx-mod-nchan.rpm', "nginx-mod-nchan*.x86_64.rpm"
+  find_pkg prebuilt_pkgs, :'nginx-mod-nchan.src.rpm', "nginx-mod-nchan*.src.rpm"
   
   last_build=Queris.redis.get build_key
   current_commit=Nchapp::Application.nchan_current_commit

@@ -1,13 +1,13 @@
 "use strict";
 
-function insertTableOfContents(tocElSelector) {
+function insertTableOfContents(tocElSelector, pageElSelector) {
   var tocContainer = document.getElement(tocElSelector);
   if(!tocContainer) {
     return;
   }
   
-  var els = tocContainer.getParent().getElements(tocElSelector + ", h1, h2, h3, h4, h5");
-  var tocSeen = false;
+  var els = document.getElement(pageElSelector).getElements("h1, h2, h3, h4, h5");
+  var tocSeen = true;
   
   var hs=[];
   var current_heading;
@@ -86,5 +86,5 @@ function insertTableOfContents(tocElSelector) {
 }
 
 addEvent('domready', function() {
-  insertTableOfContents(".tableOfContents");
+  insertTableOfContents(".sidebar .tableOfContents", "#page");
 });

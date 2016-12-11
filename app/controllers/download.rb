@@ -41,6 +41,14 @@ class Nchapp::DownloadController < Nchapp::ApplicationController
     serve_pkg '/packages', :'nginx-nchan.src.rpm'
   end
   
+  get '/nginx-mod-nchan.x86-64.rpm' do
+    serve_pkg '/packages', :'nginx-mod-nchan.rpm'
+  end
+  
+  get '/nginx-mod-nchan.src.rpm' do
+    serve_pkg '/packages', :'nginx-mod-nchan.src.rpm'
+  end
+  
   #404
   any /.*/, [:get, :post, :put, :delete] do
     response.status = 404
