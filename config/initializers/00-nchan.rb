@@ -2,7 +2,9 @@ require "git"
 
 root_dir = Dir.pwd
 #generate readme
-system "gitdir/nchan/dev/redocument.rb gitdir/nchan/ #{root_dir}/app/views/README.md"
+unless system "gitdir/nchan/dev/redocument.rb --path gitdir/nchan/ --nchapp --output #{root_dir}/app/views/README.md"
+  exit 1
+end
 
 module Nchapp
   class Application < Hobbit::Base 
