@@ -253,6 +253,25 @@
   
   This method is especially useful for EventSource and Websocket subscribers. Long-Polling subscribers will need to be re-authenticated for every new message, which may flood your application with too many authentication requests.
 
+  ### Revoking Channel Authorization
+
+  In some cases, you may want to revoke a particular subscriber's authorization for a given channel (e.g., if the user's permissions are changed). If the channel is unique to the subscriber, this is simply accomplished by deleting the channel. The same can be achieved for shared channels by subscribing each subscriber to both the shared channel and a subscriber-specific channel via a multiplexed connection. Deleting the subscriber-specific channel will terminate the subscriber's connection, thereby also terminating their subscription to the shared channel. Consider the following configuration:
+
+  ```nginx
+  location ~ /sub/(\w+) {
+    nchan_subscriber;
+    nchan_channel_id shared_$1 user_$arg_userid;
+    nchan_authorize_request /authorize;
+  }
+
+  location /pub/user {
+    nchan_publisher;
+    nchan_channel_id user_$arg_userid;
+  }
+  ```
+
+  A request to `/sub/foo?userid=1234` will subscribe to channels "shared_foo" and "user_1234" via a multiplexed connection. If you later send a `DELETE` request to `/pub/user?userid=1234`, this subscriber will be disconnected and therefore unsubscribed from both "user_1234" and "shared_foo".
+  
 %a(href="#application-callbacks")
   %h2#application-callbacks="Callbacks, Hooks, and Application Integration"
 :markdown
