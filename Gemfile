@@ -39,7 +39,7 @@ gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 gem 'queris', git: "https://github.com/slact/queris.git"
 
 gem 'i18n'
-gem "halfling", path: File.expand_path("../halfling")
+gem "halfling"
 
 group :development do
   gem "pry"
@@ -53,7 +53,7 @@ group :development do
   gem "pry-byebug", "~> 1.3.3"
   
   #gem 'awesome_print'
-  gem 'better_errors', github: 'grekko/better_errors'
+  gem 'better_errors', git: 'https://github.com/grekko/better_errors.git'
   gem 'binding_of_caller'
   gem 'rake'
 end
