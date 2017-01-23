@@ -38,21 +38,8 @@ gem 'redis', :require => ["redis/connection/hiredis", "redis"]
 
 gem 'queris', git: "https://github.com/slact/queris.git"
 
-gem 'hobbit', git: 'https://github.com/slact/hobbit.git'
-#if File.directory?(queris_path= File.expand_path("../hobbit"))
-#  gem 'hobbit', :path => queris_path
-#else
-#  gem 'hobbit', github: 'slact/hobbit'
-#end
-
-gem 'hobbit-contrib', git: 'https://github.com/slact/hobbit-contrib.git', require: 'hobbit/contrib'
 gem 'i18n'
-gem 'rack-protection'
-# Uncomment this if you want to use Sass
-#gem 'sass'
-gem 'sprockets'
-gem 'tilt'
-gem 'thin'
+gem "halfling", path: File.expand_path("../halfling")
 
 group :development do
   gem "pry"
@@ -66,7 +53,7 @@ group :development do
   gem "pry-byebug", "~> 1.3.3"
   
   #gem 'awesome_print'
-  gem 'better_errors'
+  gem 'better_errors', github: 'grekko/better_errors'
   gem 'binding_of_caller'
   gem 'rake'
 end

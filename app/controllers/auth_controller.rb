@@ -1,5 +1,5 @@
 require "pry"
-class Nchapp::AuthController < Nchapp::ApplicationController
+class Nchapp::AuthController < Nchapp::Application
   def warden
     env['warden']
   end

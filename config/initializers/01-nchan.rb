@@ -50,7 +50,7 @@ module Nchapp
     self.check_nchan
   end
   
-  class Nchapp::ApplicationController < Nchapp::Application
+  class Nchapp::Application
     
     def maybe_reload_templates
       last_commit = Queris.redis.get @@commit_key

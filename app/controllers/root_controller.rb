@@ -1,4 +1,4 @@
-class Nchapp::RootController < Nchapp::ApplicationController
+class Nchapp::RootController < Nchapp::Application
   get '/' do
     render 'README'
   end

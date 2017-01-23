@@ -1,4 +1,4 @@
-class Nchapp::DownloadController < Nchapp::ApplicationController
+class Nchapp::DownloadController < Nchapp::Application
   def serve_pkg(path, name)
     pkg = CompiledPackage.find(name)
     if pkg
