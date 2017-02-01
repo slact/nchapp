@@ -36,6 +36,24 @@ task :console do
   pry
 end
 
+namespace :webpack do
+
+  desc "npm install webpack and friends. Assumes package.js and webpack.conf.js already exist."
+  task :install do |task|
+    `npm install`
+  end
+
+  desc "watch for changes in dev mode"
+  task :dev do |task|
+    system 'node node_modules/.bin/webpack --watch --debug'
+  end
+
+  desc "build assets for production use"
+  task :release do |task|
+    system 'node node_modules/.bin/webpack -p'
+  end
+end
+
 desc 'rebuild static packages'
 task :repackage do
   build_key = "Nchan:nchapp:nchan_last_build"

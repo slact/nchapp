@@ -1,0 +1,31 @@
+{
+  "name": "nchapp",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "private",
+  
+  "dependencies": {
+    "domready":"*",
+    "mithril":"^*",
+    "modernizr":"*",
+    "nchan":"*"
+  },
+  
+  "devDependencies": {
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-preset-latest": "*",
+    "babel-preset-stage-0": "*",
+    "bundle-loader": "*",
+    "modernizr-loader":"*",
+    "css-loader": "*",
+    "file-loader": "*",
+    "url-loader": "*",
+    "less": "*",
+    "less-loader": "*",
+    "style-loader": "*",
+    "webpack-dev-server": "*",
+    "webpack": "*"
+  }
+}
