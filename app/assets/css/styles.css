@@ -7,6 +7,32 @@ body {
   font-family: sans-serif;
 }
 
+#topBar {
+  position: fixed;
+  background: #009974;
+  top: 0;
+  height: 33px;
+  width: 100%;
+  z-index: 100;
+}
+
+#topBar img.logo {
+  margin: 3px;
+  padding-left: 1em;
+  float: left;
+}
+#topBar ul {
+  margin: 2px;
+  position: absolute;
+  right: 0;
+}
+#topBar a {
+  color: white;
+}
+#topBar a:hover {
+  color: green;
+}
+
 .header {
   position: relative;
   left:0;
