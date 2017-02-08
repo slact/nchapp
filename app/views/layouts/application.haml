@@ -47,14 +47,20 @@
     
     %ul.announcement
       %li.nginxconf
-        <a href="/nginxconf">Notes</a> for my talk at <a href="https://www.nginx.com/nginxconf/">Nginx conf 2016</a> 
-        are <a href="/nginxconf2016">available here</a>.
+        %a(href="/nginxconf2016")="Notes"
+        and
+        %a(href="https://www.youtube.com/watch?v=TVgQSmqWm60")="video"
+        for my talk at 
+        %a(href="https://www.nginx.com/nginxconf/")="Nginx conf 2016"
+        are
+        %a(href="/nginxconf2016")="available here"
       %li.redisconf
-        Notes and 
+        %a(href="/redisconf2016")="Notes"
+        and 
         %a(href="https://www.youtube.com/watch?v=J3gVCBctDaE")="video"
         for my previous talk at
         %a(href="http://redisconference.com/")="Redisconf 2016"
-        %a(href="/redisconf")="available here"
+        %a(href="/redisconf2016")="available here"
     
     .pageLayout
       #page.page=yield
