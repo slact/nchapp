@@ -9,7 +9,8 @@
     "domready":"*",
     "mithril":"^*",
     "modernizr":"*",
-    "nchan":"*"
+    "nchan":"*",
+    "scrollmonitor":"*"  
   },
   
   "devDependencies": {

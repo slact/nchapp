@@ -14,13 +14,41 @@ body {
   height: 33px;
   width: 100%;
   z-index: 100;
+  transition: all 0.3s ease-in;
 }
 
-#topBar img.logo {
+#topBar.outOfView {
+  top: -65px;
+}
+
+#topBar img.logo, #topBar img.compactLogo {
   margin: 3px;
-  padding-left: 1em;
+  padding-left: 5px;
   float: left;
 }
+
+#topBar img.compactLogo {
+  display: none;
+}
+
+@media screen and (max-width: 850px){
+  #topBar {
+    top: -65px;
+  }
+}
+
+
+@media screen and (max-width: 1300px){
+  #topBar img.logo {
+    display: none;
+  }
+  
+  #topBar img.compactLogo {
+    display: initial;
+  }
+}
+
+
 #topBar ul {
   margin: 2px;
   position: absolute;

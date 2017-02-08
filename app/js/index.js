@@ -1,6 +1,7 @@
 import m from "mithril";
 import NchanSubscriber from "nchan";
 import domready from "domready";
+import ScrollMonitor from "scrollmonitor";
 
 "use strict";
 
@@ -82,8 +83,28 @@ domready(function() {
     return m("a", {"classList": a.classList, href: a.href, text: a.textContent})
   }));
   
+  m.render(document.querySelector("#topBar"), [
+    m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"}),
+    m("img.compactLogo", {src: "/img/nchan_top_logo_compact.png", alt: "NCHAN"}), 
+    nav
+  ])
   
-  m.render(document.querySelector("#topBar"), [m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"}), nav])
+  var header = document.querySelector(".header")
+  if(header) {
+    var watcher = ScrollMonitor.create(header)
+    var topBar = document.querySelector("#topBar")
+    watcher.enterViewport(function() {
+      topBar.classList.add("outOfView"); 
+    })
+    watcher.exitViewport(function() {
+      topBar.classList.remove("outOfView")
+    })
+  }
+  
+  window.toggl=function(){
+    document.querySelector("#topBar").classList.toggle("outOfView"); 
+    
+  }
 })
 
 

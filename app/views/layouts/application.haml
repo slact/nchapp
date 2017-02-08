@@ -11,17 +11,17 @@
     %link(rel="icon" href="/icons/iphone.png" sizes="57x57" type="image/png")
     %link(rel="icon" href="/icons/nchan.svg" sizes="any" type="image/svg+xml")
     
-    %script(type="text/javascript" src="/js/index.js")
-    
     %link(rel="stylesheet" type="text/css" href="/css/styles.css")
     %link(rel="stylesheet" type="text/css" href="/css/pygments.css")
 
     %link(rel="image_src" href="/img/nchan_logo.png")
     
     %title="Nchan - flexible pub/sub server for the modern web."
+    %script(type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Element.prototype.classList,Array.prototype.map,Array.prototype.forEach,Element.prototype.classList,document.querySelector")
   
   %body
-    #topBar
+    %script(type="text/javascript" src="/js/index.js")
+    #topBar.outOfView
     .header
       %img.logo(src='/img/nchan_logo.png' alt="Nchan logo")
       %a.logo-overlay(href='/')
