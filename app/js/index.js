@@ -62,7 +62,7 @@ function insertTableOfContents(tocElSelector, pageElSelector) {
   
   var rootHeading = new Heading();
   
-  els.forEach(function(el) {
+  [...els].forEach(function(el) {
     //console.log(el, i)
     rootHeading.subheading(new Heading(el));
   });

@@ -44,7 +44,7 @@ body {
   }
   
   #topBar img.compactLogo {
-    display: initial;
+    display: block;
   }
 }
 
