@@ -1,18 +1,18 @@
-%h3="Video"
+%h3#video="Video"
 %p
   %iframe(width="560" height="315" src="https://www.youtube.com/embed/J3gVCBctDaE" frameborder="0" allowfullscreen="1")
 
 %h1="Redisconf 2016 talk notes"
 %a(href="/documents/redisconf2016-slides.pdf")slides (pdf)</a>
 
-%h3="hsss"
+%h3#hsss="hsss"
 :markdown
   Easily embed Lua Scrips in C.  
   Install with `gem install hsss`.
   Full documentation at [https://github.com/slact/hsss](https://github.com/slact/hsss)
   - [usage in nchan development build script](https://github.com/slact/nchan/blob/master/dev/rebuild.sh#L145-L152)
   
-%h3="Redis + hsss"
+%h3#redis-and-hsss="Redis + hsss"
 :plain
   <a href="https://github.com/slact/redis">https://github.com/slact/redis</a>
   <script type="text/javascript" src="https://asciinema.org/a/b35ki1280vk04pxj2opol3zvg.js" id="asciicast-b35ki1280vk04pxj2opol3zvg" async></script>
@@ -20,7 +20,7 @@
   - [src/Makefile changes](https://github.com/slact/redis/blob/unstable/src/Makefile#L140-L150)
   
 
-%h3="Lua scripts and Redis in Nchan"
+%h3#lua-scripts="Lua scripts and Redis in Nchan"
 :markdown
   - [Nginx event loop adapter](https://github.com/slact/nchan/blob/master/src/store/redis/redis_nginx_adapter.c) for hiredis
   - [testscripts.rb](https://github.com/slact/nchan/blob/master/src/store/redis/scripts/testscripts.rb) Nchan script testing harness

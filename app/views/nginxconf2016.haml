@@ -1,42 +1,42 @@
-%h3="Video"
+%h3#video="Video"
 %p
   %iframe(width="560" height="315" src="https://www.youtube.com/embed/TVgQSmqWm60" frameborder="0" allowfullscreen="1")
 
-%h1="Nginx Conf 2016 talk notes"
+%h1#notes="Nginx Conf 2016 talk notes"
 %a(href="/documents/nginxconf2016-slides.pdf")slides (pdf)</a>
 
-%h3="Channels & Channel IDs"
+%h3#channels-and-channel-ids="Channels & Channel IDs"
 :markdown
   - Channel IDs [explained in detail](/#the-channel-id).
   - A guide on [keeping channels secure](/details#securing-channels).
   - [Channel multiplexing](/#channel-multiplexing)
 
-%h3="Publishers & Subscribers"
+%h3#publishers-and-subscribers="Publishers & Subscribers"
 :markdown
   - A [conceptual overview](/#conceptual-overview) of the 'simple example' provided.  
   - Detailed descriptions of [publisher](/#publisher-endpoints) and [subscriber](/#subscriber-endpoints), and the combination [pubsub](/#pubsub-endpoint) endpoints.
   - The optional [NchanSubscriber.js](https://github.com/slact/nchan/blob/master/NchanSubscriber.js)
 
-%h3="Message Buffering"
+%h3#message-buffering="Message Buffering"
 :markdown
   - The [`nchan_message_buffer_length`](/#nchan_message_buffer_length) setting.
   - The [`nchan_message_timeout`](/#nchan_message_timeout) setting.
   - The [`nchan_subscriber_first_message`](/#nchan_subscriber_first_message) setting.
   
-%h3="Application Interface"
+%h3#api="Application Interface"
 :markdown
   - Listening on a [local address for the publisher location](/details#keeping-the-channel-private).
   - Upstream authentication using [`nchan_authorize_request`](/details#authenticate-with-nchan_authorize_request).
   - Upstream message passing using [`nchan_publisher_upstream_request`](/#nchan_publisher_upstream_request)
 
-%h3="Storage"
+%h3#storage="Storage"
 :markdown
   - A description of the [memory storage engine](/#memory-storage).
   - What is [Redis](https://redis.io)?
   - A description of the [Redis storage engine](/#redis).
   - An overview of [Redis Cluster uses and benefits](/details#redis-cluster).
   
-%h3="Other Features Grab-bag"
+%h3#other-features="Other Features Grab-bag"
 :markdown
   - [`nchan_stub_status`](/#nchan_stub_status).
   - Access-Control support with [`nchan_access_control_allow_origin`](http://localhost:9292/#nchan_access_control_allow_origin).
