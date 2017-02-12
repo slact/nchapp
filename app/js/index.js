@@ -80,7 +80,7 @@ domready(function() {
   var links = document.querySelector("ul.navigation").querySelectorAll("li a")
   
   var nav = m("ul.navigation", [...links].map((a)=>{
-    return m("a", {"classList": a.classList, href: a.href, text: a.textContent})
+    return m("li", [m("a", {"classList": a.classList, href: a.href, text: a.textContent})])
   }));
   
   m.render(document.querySelector("#topBar"), [

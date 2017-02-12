@@ -16,6 +16,11 @@ body {
   z-index: 100;
   transition: all 0.3s ease-in;
 }
+#topBar li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
 #topBar.outOfView {
   top: -65px;
