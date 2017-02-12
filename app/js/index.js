@@ -44,7 +44,7 @@ function insertTableOfContents(tocElSelector, pageElSelector) {
     }
     
     m() {
-      if(this.tagLvl == 0) {
+      if(this.subs.length > 0 && this.tagLvl == 0) {
         return [
           m("a.toggle",  {href:"#"}),
           m("h2", "Contents"),
@@ -106,5 +106,3 @@ domready(function() {
     
   }
 })
-
-

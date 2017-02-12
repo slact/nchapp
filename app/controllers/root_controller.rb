@@ -1,6 +1,6 @@
 class Nchapp::RootController < Nchapp::Application
   get '/' do
-    render 'README'
+    render 'documentation'
   end
   
   get '/readme' do
@@ -18,7 +18,7 @@ class Nchapp::RootController < Nchapp::Application
   end
   
   get '/details' do
-    render 'details'
+    response.redirect '/'
   end
   
   get '/experiment' do
