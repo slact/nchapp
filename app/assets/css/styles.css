@@ -75,11 +75,11 @@ ul {
 }
 
 li.redisconf {
-  background: url('/img/redisconf2016.png') 0 0 no-repeat;
+  background: url('/img/redisconf2016.png') 0 4px no-repeat;
 }
 
 li.nginxconf {
-  background: url('/img/nginxconf2016.png') 5px 0 no-repeat;
+  background: url('/img/nginxconf2016.png') 3px 4px no-repeat;
 }
 
 .announcement {
@@ -104,8 +104,9 @@ ul.announcement {
 ul.announcement li {
   margin-left: 4px;
   margin-top: 4px;
-  padding-left: 54px;
-  padding-top: 10px;
+  padding-left: 34px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   min-height: 30px;
 }
 
