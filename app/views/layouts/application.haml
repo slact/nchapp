@@ -1,11 +1,11 @@
 !!!
 
-%html
+%html(lang="en")
   %head
-    %meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+    %meta(charset="utf-8")
     %meta(name="keywords" content="nchan pub/sub pubsub server nginx websocket longpoll eventstream Server-Sent events pushmodule push module")
     %meta(name="description" content="Nchan - flexible pubsub for the modern web")
-    
+    %meta(name="viewport" content="width=device-width, initial-scale=1")
     %link(rel="icon" href="/icons/tiny.png" sizes="16x16" type="image/png")
     %link(rel="icon" href="/icons/small.png" sizes="32x32" type="image/png")
     %link(rel="icon" href="/icons/iphone.png" sizes="57x57" type="image/png")
@@ -35,13 +35,9 @@
         %li
           %a(href="/#install")="install"
         %li
-          %a(href="/upgrade")="upgrade"
+          %a(href="/#getting-started")="docs"
         %li
           %a(href="/#configuration-directives")="configure"
-        %li
-          %a(href="/details")="details"
-        %li
-          %a(href="#contribute")="contribute"
         %li
           %a.github(href="https://github.com/slact/nchan")="github"
     
@@ -64,6 +60,7 @@
     
     .pageLayout
       #page.page=yield
+      #sidebarScrollReference
       .sidebar
         .tableOfContents
     

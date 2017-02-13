@@ -73,20 +73,48 @@ function insertTableOfContents(tocElSelector, pageElSelector) {
 
 domready(function() {
   insertTableOfContents(".sidebar .tableOfContents", "#page");
+  var sideBar = document.querySelector(".sidebar")
+  if(sideBar) {
+    var watcher = ScrollMonitor.create(document.querySelector("#sidebarScrollReference"), 40)
+    var toggleSticky = function() {
+      console.log(watcher.isAboveViewport)
+      if(watcher.isAboveViewport) {
+        sideBar.classList.add("sidebarSticky")
+      }
+      else {
+        sideBar.classList.remove("sidebarSticky")
+      }
+    }
+    toggleSticky()
+    watcher.on('stateChange', toggleSticky)
+  }
 });
 
 domready(function() {
   //grab nav links
-  var links = document.querySelector("ul.navigation").querySelectorAll("li a")
+  var navEl = document.querySelector("ul.navigation")
+  var links
+  if(navEl) {
+    links = navEl.querySelectorAll("li a")
+  }
+  
+  if(!links) {
+    return;
+  }
   
   var nav = m("ul.navigation", [...links].map((a)=>{
     return m("li", [m("a", {"classList": a.classList, href: a.href, text: a.textContent})])
   }));
   
   m.render(document.querySelector("#topBar"), [
-    m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"}),
-    m("img.compactLogo", {src: "/img/nchan_top_logo_compact.png", alt: "NCHAN"}), 
-    nav
+    m("div.logo", [ m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"})]),
+    m("a.menu", {onclick: (ev)=>{
+      document.querySelector("#topBar").classList.toggle("navMenu");
+    }}),
+    nav,
+    m("div.shroud", {onclick: (ev)=>{
+      document.querySelector("#topBar").classList.toggle("navMenu");
+    }})
   ])
   
   var header = document.querySelector(".header")
@@ -99,10 +127,5 @@ domready(function() {
     watcher.exitViewport(function() {
       topBar.classList.remove("outOfView")
     })
-  }
-  
-  window.toggl=function(){
-    document.querySelector("#topBar").classList.toggle("outOfView"); 
-    
   }
 })
