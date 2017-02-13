@@ -9,6 +9,7 @@ domready(function() {
     "#keeping-the-channel-private":         "#keeping-a-channel-private",
     "#application-callbacks":               "#hooks-and-callbacks",
     "#subscribe-and-unsubscribe-callbacks": "#subscriber-presence",
+    "#subsribe-and-unsubscribe-callbacks":  "#subscriber-presence",
     "#message-publishing-callbacks":        "#message-forwarding",
     "#using-redis":                         "#redis"
   };

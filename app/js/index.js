@@ -77,7 +77,6 @@ domready(function() {
   if(sideBar) {
     var watcher = ScrollMonitor.create(document.querySelector("#sidebarScrollReference"), 40)
     var toggleSticky = function() {
-      console.log(watcher.isAboveViewport)
       if(watcher.isAboveViewport) {
         sideBar.classList.add("sidebarSticky")
       }
