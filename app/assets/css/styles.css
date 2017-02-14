@@ -272,19 +272,26 @@ a.github {
   display: block;
   position: fixed;
   width: 100%;
-  top: 33px;
+  top: 0;
   bottom:0;
   left: 0;
   background: rgba(0, 0, 0, 0.3);
   z-index: 9;
 }
 
+#topBar.outOfView .tableOfContentsContainer {
+  top: 10px;
+}
+#topBar.outOfView .tableOfContentsContainer ul.tableOfContents {
+  max-height: calc(100vh - 43px);
+}
+
 #topBar .tableOfContentsContainer {
   position: fixed;
   top: 40px;
   visibility: hidden;
-  opacity: 0;
-  right: -100px;
+  opacity: 1;
+  right: -150px;
 }
 
 #topBar.contentsMenu .tableOfContentsContainer {
@@ -317,13 +324,17 @@ a.github {
   
   #topBar ul.navigation {
     visibility: hidden;
-    opacity: 0;
+    opacity: 1;
     display: block;
     position: fixed;;
-    top: 30px;
+    top: 33px;
     margin: 0;
-    right: -100px;
+    right: -150px;
     z-index: -1;
+  }
+  
+  #topBar.outOfView ul.navigation {
+    top: 0;
   }
   
   #topBar.navMenu ul.navigation {
