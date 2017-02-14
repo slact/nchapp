@@ -110,7 +110,9 @@ domready(function() {
   m.render(document.querySelector("#topBar"), [
     m("div.logo", [ m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"})]),
     m("a.menu", {onclick: (ev)=>{
-      document.querySelector("#topBar").classList.toggle("navMenu");
+      var cl = document.querySelector("#topBar").classList
+      cl.toggle("navMenu")
+      cl.remove("contentsMenu")
     }}),
     nav,
     m("div.tableOfContentsContainer", [m("div.tableOfContents.tocBox", "")]),
