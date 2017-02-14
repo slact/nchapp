@@ -5,11 +5,7 @@ import ScrollMonitor from "scrollmonitor";
 
 "use strict";
 
-function insertTableOfContents(tocElSelector, pageElSelector) {
-  var tocContainer = document.querySelector(tocElSelector);
-  if(!tocContainer) {
-    return;
-  }
+function insertTableOfContents(tocElSelectors, pageElSelector) {
   
   var els = document.querySelector(pageElSelector).querySelectorAll("h1, h2, h3, h4, h5");
 
@@ -56,7 +52,16 @@ function insertTableOfContents(tocElSelector, pageElSelector) {
       if(this.subs.length > 0) {
         subList.push(m("ul", this.subs.map((sub) => { return sub.m() })));
       }
-      return m("li", [ m('a', {"href": "#" + this.id}, this.text)].concat(subList))
+      return m("li", [ m('a', {
+        "href": "#" + this.id,
+        onclick: (ev)=>{
+          var cl = document.querySelector("#topBar").classList
+          if(cl) {
+            cl.remove("navMenu")
+            cl.remove("contentsMenu")
+          }
+        }
+      }, this.text)].concat(subList))
     }
   }
   
@@ -67,29 +72,20 @@ function insertTableOfContents(tocElSelector, pageElSelector) {
     rootHeading.subheading(new Heading(el));
   });
   
-  m.render(tocContainer, rootHeading.m());
+  if(!Array.isArray(tocElSelectors)) {
+    tocElSelectors = [ tocElSelectors ];
+  }
   
+  tocElSelectors.forEach(function(selector) {
+    var tocContainer = document.querySelector(selector);
+    if(tocContainer) {
+      m.render(tocContainer, rootHeading.m());
+    }
+  });
 }
 
 domready(function() {
-  insertTableOfContents(".sidebar .tableOfContents", "#page");
-  var sideBar = document.querySelector(".sidebar")
-  if(sideBar) {
-    var watcher = ScrollMonitor.create(document.querySelector("#sidebarScrollReference"), 40)
-    var toggleSticky = function() {
-      if(watcher.isAboveViewport) {
-        sideBar.classList.add("sidebarSticky")
-      }
-      else {
-        sideBar.classList.remove("sidebarSticky")
-      }
-    }
-    toggleSticky()
-    watcher.on('stateChange', toggleSticky)
-  }
-});
-
-domready(function() {
+  
   //grab nav links
   var navEl = document.querySelector("ul.navigation")
   var links
@@ -105,14 +101,23 @@ domready(function() {
     return m("li", [m("a", {"classList": a.classList, href: a.href, text: a.textContent})])
   }));
   
+  nav.children.push(m("li.tocBox", {
+    onclick: (ev)=> {
+      document.querySelector("#topBar").classList.add("contentsMenu")
+    }
+  }, "Page Contents"))
+  
   m.render(document.querySelector("#topBar"), [
     m("div.logo", [ m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"})]),
     m("a.menu", {onclick: (ev)=>{
       document.querySelector("#topBar").classList.toggle("navMenu");
     }}),
     nav,
+    m("div.tableOfContentsContainer", [m("div.tableOfContents.tocBox", "")]),
     m("div.shroud", {onclick: (ev)=>{
-      document.querySelector("#topBar").classList.toggle("navMenu");
+      var cl = document.querySelector("#topBar").classList
+      cl.remove("navMenu")
+      cl.remove("contentsMenu")
     }})
   ])
   
@@ -127,4 +132,24 @@ domready(function() {
       topBar.classList.remove("outOfView")
     })
   }
+  
+  
+  
+  insertTableOfContents([".sidebar .tableOfContents", "#topBar .tableOfContents"], "#page");
+  var sideBar = document.querySelector(".sidebar")
+  if(sideBar) {
+    var watcher = ScrollMonitor.create(document.querySelector("#sidebarScrollReference"), 40)
+    var toggleSticky = function() {
+      if(watcher.isAboveViewport) {
+        sideBar.classList.add("sidebarSticky")
+      }
+      else {
+        sideBar.classList.remove("sidebarSticky")
+      }
+    }
+    toggleSticky()
+    watcher.on('stateChange', toggleSticky)
+  }
+  
+
 })

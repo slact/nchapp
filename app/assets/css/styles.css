@@ -45,19 +45,19 @@ ul {
   padding-left: 20px;
 }
 
-#topBar ul {
+#topBar ul.navigation {
   margin: 2px;
   position: absolute;
   right: 0;
 }
-#topBar a {
+#topBar ul.navigation a {
   color: white;
 }
-#topBar a.github {
+#topBar ul.navigation a.github {
   color: #333; 
 }
 
-#topBar a:hover {
+#topBar ul.navigation a:hover {
   color: green;
 }
 
@@ -155,7 +155,10 @@ ul.announcement li {
   margin:0;
   padding-left: 240px;
   padding-top: 185px;
-  border: 0px solid blue;
+}
+
+ul.navigation li.tocBox {
+  display: none;
 }
 
 ul.navigation li {
@@ -165,7 +168,14 @@ ul.navigation li {
 }
 ul.navigation a {
   font-size:1.4em;
-  padding:0.2em;
+  padding: 0.2em;
+  display: block;
+  padding-top: 0;
+  text-align: right;
+}
+
+#topBar.navMenu ul.navigation a {
+  padding-right:0.5em;
 }
 
 @media screen and (max-width: 550px){
@@ -260,6 +270,26 @@ a.github {
   z-index: 9;
 }
 
+#topBar .tableOfContentsContainer {
+  position: fixed;
+  top: 40px;
+  right: 5px;
+  display: none;
+}
+
+#topBar.contentsMenu .tableOfContentsContainer {
+  display: block;
+  z-index: 10;
+}
+
+#topBar.contentsMenu ul.navigation {
+  display: none !important;
+}
+
+#topBar.navMenu div.tableOfContents {
+  display: block;
+}
+
 @media screen and (max-width: 900px) {
   #topBar a.menu {
     display: block;
@@ -277,20 +307,26 @@ a.github {
   }
   
   #topBar.navMenu ul.navigation {
-    background: #009974;
     display: block;
     position: absolute;
     top: 30px;
     right: 0px;
     margin:0;
-    padding: 8px;
-    overflow: auto;
     z-index: 10;
   }
   
-  #topBar.navMenu ul li {
+  #topBar.navMenu ul.navigation li {
+    background: #009974;
+    padding:1px;
     display: block;
     float: none;
+  }
+  #topBar.navMenu ul.navigation li:first-child {
+    padding-top:8px;
+  }
+  
+  #topBar.navMenu ul li.tocBox {
+    display: none;
   }
   
   iframe.video {
@@ -317,6 +353,13 @@ a.github {
   
   .sidebar {
     display: none; 
+  }
+  
+  #topBar.navMenu ul li.tocBox {
+    display: block;
+    font-size: 1.4em;
+    margin-top: 5px;
+    cursor: pointer;
   }
   
   .page div.nchan-stub-status {
@@ -369,11 +412,13 @@ h5{
   font-size: 12px;
 }
 
-div.tableOfContents {
+.tocBox {
   border: 1px solid #aaaaaa;
   border-radius: 7px;
-  background: #f9f9f9;
-  position: sticky;
+  background: #f9f9f9 !important;
+}
+
+div.tableOfContents {
   top: 40px;
   left: 0;
   width: 250px;
@@ -389,18 +434,18 @@ div.tableOfContents {
   display: none;
 }
 
-.page .tableOfContents a.toggle {
-  display: block;
+.tableOfContents a.toggle {
+  display: none;
   position: absolute;
   top: 2px;
   right: 2px;
   font-size: 70%;
 }
-.page .tableOfContents a.toggle:before {
+.tableOfContents a.toggle:before {
   content: "[ hide ]";
 }
 
-.page .tableOfContentsHidden a.toggle:before {
+.tableOfContentsHidden a.toggle:before {
   content: "[ show ]";
 }
 
