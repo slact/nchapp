@@ -187,6 +187,10 @@ ul.navigation a {
   .header div.nginx {
     right: 5px;
   }
+  iframe.video {
+    width: 300px !important;
+    height: 169px !important;
+  }
 }
 @media screen and (max-width: 460px){
   .header div.nginx {
@@ -287,6 +291,11 @@ a.github {
   #topBar.navMenu ul li {
     display: block;
     float: none;
+  }
+  
+  iframe.video {
+    width: 450px;
+    height: 253px;
   }
   
 }
