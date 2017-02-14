@@ -10,6 +10,10 @@ body {
 
 #topBar {
   position: fixed;
+}
+
+#topBar .menuBar {
+  position: fixed;
   background: #009974;
   top: 0;
   height: 33px;
