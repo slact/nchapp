@@ -5,6 +5,16 @@ import ScrollMonitor from "scrollmonitor";
 
 "use strict";
 
+var menuToggler = function(what) {
+  return function() {
+    var cl = document.querySelector("#topBar").classList
+    what == "on" && cl.add("navMenu");
+    what == "off" && cl.remove("navMenu");
+    what == "contents" ? cl.add("contentsMenu") : cl.remove("contentsMenu");
+    !what && cl.toggle("navMenu");
+  }
+}
+
 function insertTableOfContents(tocElSelectors, pageElSelector) {
   
   var els = document.querySelector(pageElSelector).querySelectorAll("h1, h2, h3, h4, h5");
@@ -54,13 +64,7 @@ function insertTableOfContents(tocElSelectors, pageElSelector) {
       }
       return m("li", [ m('a', {
         "href": "#" + this.id,
-        onclick: (ev)=>{
-          var cl = document.querySelector("#topBar").classList
-          if(cl) {
-            cl.remove("navMenu")
-            cl.remove("contentsMenu")
-          }
-        }
+        onclick: menuToggler("off")
       }, this.text)].concat(subList))
     }
   }
@@ -98,31 +102,26 @@ domready(function() {
   }
   
   var nav = m("ul.navigation", [...links].map((a)=>{
-    return m("li", [m("a", {"classList": a.classList, href: a.href, text: a.textContent})])
+    return m("li", [m("a", {
+      "classList": a.classList, 
+      href: a.href, 
+      text: a.textContent,
+      onclick: menuToggler("off")
+    })])
   }));
   
   nav.children.push(m("li.tocBox", {
-    onclick: (ev)=> {
-      document.querySelector("#topBar").classList.add("contentsMenu")
-    }
+    onclick: menuToggler("contents")
   }, "Page Contents"))
   
   m.render(document.querySelector("#topBar"), [
     m("div.menuBar", [
       m("div.logo", [ m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"})]),
-      m("a.menu", {onclick: (ev)=>{
-        var cl = document.querySelector("#topBar").classList
-        cl.toggle("navMenu")
-        cl.remove("contentsMenu")
-      }}),
+      m("a.menu", {onclick: menuToggler()}),
       nav
     ]),
     m("div.tableOfContentsContainer", [m("div.tableOfContents.tocBox", "")]),
-    m("div.shroud", {onclick: (ev)=>{
-      var cl = document.querySelector("#topBar").classList
-      cl.remove("navMenu")
-      cl.remove("contentsMenu")
-    }})
+    m("div.shroud", {onclick: menuToggler("off")})
   ])
   
   var header = document.querySelector(".header")
