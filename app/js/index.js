@@ -108,13 +108,15 @@ domready(function() {
   }, "Page Contents"))
   
   m.render(document.querySelector("#topBar"), [
-    m("div.logo", [ m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"})]),
-    m("a.menu", {onclick: (ev)=>{
-      var cl = document.querySelector("#topBar").classList
-      cl.toggle("navMenu")
-      cl.remove("contentsMenu")
-    }}),
-    nav,
+    m("div.menuBar", [
+      m("div.logo", [ m("img.logo", {src: "/img/nchan_top_logo.png", alt: "NCHAN"})]),
+      m("a.menu", {onclick: (ev)=>{
+        var cl = document.querySelector("#topBar").classList
+        cl.toggle("navMenu")
+        cl.remove("contentsMenu")
+      }}),
+      nav
+    ]),
     m("div.tableOfContentsContainer", [m("div.tableOfContents.tocBox", "")]),
     m("div.shroud", {onclick: (ev)=>{
       var cl = document.querySelector("#topBar").classList

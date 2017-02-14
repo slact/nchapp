@@ -10,6 +10,8 @@ body {
 
 #topBar {
   position: fixed;
+  z-index:11;
+  top: 0;
 }
 
 #topBar .menuBar {
@@ -21,6 +23,7 @@ body {
   left:0;
   right:0;
   transition: all 0.3s ease-in;
+  visibility: visible;
 }
 #topBar li {
   list-style: none;
@@ -28,8 +31,14 @@ body {
   padding: 0;
 }
 
-#topBar.outOfView {
+#topBar.outOfView .menuBar {
   top: -65px;
+  visibility: hidden;
+}
+
+#topBar.outOfView.navMenu .menuBar {
+  top: -65px;
+  visibility: visible;
 }
 
 #topBar div.logo {
@@ -178,10 +187,6 @@ ul.navigation a {
   text-align: right;
 }
 
-#topBar.navMenu ul.navigation a {
-  padding-right:0.5em;
-}
-
 @media screen and (max-width: 550px){
   .header div.nginx {
     top:30px;
@@ -277,12 +282,16 @@ a.github {
 #topBar .tableOfContentsContainer {
   position: fixed;
   top: 40px;
-  right: 5px;
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  right: -100px;
 }
 
 #topBar.contentsMenu .tableOfContentsContainer {
-  display: block;
+  visibility: visible;
+  right: 5px;
+  opacity: 1;
+  transition: all 0.3s ease-in;
   z-index: 10;
 }
 
@@ -307,29 +316,38 @@ a.github {
   }
   
   #topBar ul.navigation {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    display: block;
+    position: fixed;;
+    top: 30px;
+    margin: 0;
+    right: -100px;
+    z-index: -1;
   }
   
   #topBar.navMenu ul.navigation {
-    display: block;
-    position: absolute;
-    top: 30px;
-    right: 0px;
-    margin:0;
-    z-index: 10;
+    visibility: visible;
+    opacity: 1;
+    right: 0;
+    transition: all 0.3s ease-in;
   }
   
-  #topBar.navMenu ul.navigation li {
+  #topBar ul.navigation a {
+    padding-right:0.5em;
+  }
+  
+  #topBar ul.navigation li {
     background: #009974;
     padding:1px;
     display: block;
     float: none;
   }
-  #topBar.navMenu ul.navigation li:first-child {
+  #topBar ul.navigation li:first-child {
     padding-top:8px;
   }
   
-  #topBar.navMenu ul li.tocBox {
+  #topBar ul li.tocBox {
     display: none;
   }
   
