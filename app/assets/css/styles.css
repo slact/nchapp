@@ -372,12 +372,10 @@ a.github {
     margin-right: 4%;
     overflow: auto;
   }
-  .footer, .page p, .page ul, div.highlight pre {
-    overflow: auto;
-  }
   
-  #configuration-directives > li {
-    overflow: auto;
+  #configuration-directives > li, .relevant-directives, .footer, .page p, .page ul, div.highlight pre {
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   
   .sidebar {
