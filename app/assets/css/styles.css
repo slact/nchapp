@@ -195,6 +195,7 @@ ul.navigation a {
   
   img.benchmark_graph {
     width:300px;
+    height: auto;
   }
   
 }
@@ -217,7 +218,7 @@ ul.navigation a {
   }
   .header img.logo {
     width: 250px;
-    height: 155px;
+    height: auto;
   }
   
   .header a.logo-overlay {
