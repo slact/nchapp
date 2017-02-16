@@ -678,6 +678,9 @@ p.footnote {
   margin-left: 0.4em;
   margin-right:0.4em;
   background-color: #f0f5ff;
+  margin-top: 0.5em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
 }
 .relevant-directives a.directive {
   font-family: monospace;
