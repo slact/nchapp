@@ -195,6 +195,7 @@ ul.navigation a {
   
   img.benchmark_graph {
     width:300px;
+    height: auto;
   }
   
 }
@@ -217,7 +218,7 @@ ul.navigation a {
   }
   .header img.logo {
     width: 250px;
-    height: 155px;
+    height: auto;
   }
   
   .header a.logo-overlay {
@@ -291,13 +292,13 @@ a.github {
   top: 40px;
   visibility: hidden;
   right: -150px;
+  z-index: 10;
 }
 
 #topBar.contentsMenu .tableOfContentsContainer {
   visibility: visible;
   right: 5px;
   transition: all 0.3s ease-in;
-  z-index: 10;
 }
 
 #topBar.contentsMenu ul.navigation {
@@ -372,12 +373,10 @@ a.github {
     margin-right: 4%;
     overflow: auto;
   }
-  .footer, .page p, .page ul, div.highlight pre {
-    overflow: auto;
-  }
   
-  #configuration-directives > li {
-    overflow: auto;
+  #configuration-directives > li, .relevant-directives, .footer, .page p, .page ul, div.highlight pre {
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   
   .sidebar {
@@ -680,6 +679,9 @@ p.footnote {
   margin-left: 0.4em;
   margin-right:0.4em;
   background-color: #f0f5ff;
+  margin-top: 0.5em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
 }
 .relevant-directives a.directive {
   font-family: monospace;
