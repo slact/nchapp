@@ -1,0 +1,43 @@
+%h2="Contact"
+%img.someone(src="/img/notmewellmaybe.png" alt="who's that?")
+:markdown
+  Oh, hello there. I'm Leo.
+  
+  Do you have questions? A successful large-scale deployment? ..A failing one?   
+  Found a bug? Want to submit a patch? Send money? ...Cake?
+  
+  Email me at [nchan@slact.net](mailto:nchan@slact.net?subject=I like Nchan), 
+  or get in touch with me on [github](https://github.com/slact).
+  
+%h3="Support"
+#contribute
+  %img.btc-QR(src="img/bitcoin-QR.png" alt="15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3")
+  If you found Nchan useful, please contribute to help its development.
+  
+  %table
+    %tr
+      %td.paymentIcon
+        %img(src="/icons/btc.png" alt="btc")
+      %td.paymentName
+        Bitcoin
+      %td
+        %code
+          %a(href="bitcoin:15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3?label=nchan")="15dLBzRS4HLRwCCVjx4emYkxXcyAPmGxM3"
+    %tr
+      %td.paymentIcon
+        %img(src="/icons/pp.png" alt="paypal")
+      %td.paymentName
+        Paypal
+      %td
+        %form(action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top")
+          %input(type="hidden" name="cmd" value="_s-xclick")
+          %input(type="hidden" name="hosted_button_id" value="PN29WB8QXFP8J")
+          %input(type="image" src="/icons/btn_donate_LG.gif" name="submit" alt="Donate via Paypal" title="Give me money maybe?")
+          -#%img(alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1")
+  %br
+  
+  :markdown
+    If you need help or support with any aspect of Nchan, consulting services are available. Contact me at 
+    [nchan@slact.net](mailto:nchan@slact.net?subject=Nchan Support).
+  
+  

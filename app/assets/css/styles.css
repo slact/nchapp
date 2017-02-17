@@ -787,14 +787,24 @@ img.someone {
   margin-right:0.5em;
   padding:0.2em;
   background-color: white;
+  height: auto;
+  max-width:30%;
 }
 
 .footer img.btc-QR {
   float: left;
+  height: auto;
+  max-width: 30%;
 }
 
 .footer i{
   font-size: 35px;
+}
+
+@media screen and (max-width: 550px){
+  #contribute .paymentName {
+    display: none;
+  }
 }
 
 .closer {
