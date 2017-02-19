@@ -484,6 +484,7 @@ div.tableOfContents {
 .tableOfContents ul{
   list-style: none;
   padding-left:20px;
+  overflow: auto;
 }
 ul.tableOfContents {
   padding:10px;
