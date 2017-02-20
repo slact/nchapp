@@ -520,6 +520,7 @@ a:active{ color:#0a0; }
 a#about {
   padding-top: 2.2em;
   margin-top: -2.2em;
+  display: block;
 }
 
 img.benchmark_graph {
