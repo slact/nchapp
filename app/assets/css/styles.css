@@ -107,8 +107,6 @@ li.nginxconf {
   
   margin-left: 5%;
   margin-right: 5%;
-  margin-bottom: 2em;
-  
 }
 ul.announcement {
   list-style: none;
@@ -243,6 +241,7 @@ a.github {
   padding-right: 270px;
   position: relative;
   top: 0;
+  margin-top:2em;
 }
 
 .sidebar, #sidebarScrollReference {
@@ -520,9 +519,11 @@ a:active{ color:#0a0; }
 a#about {
   padding-top: 2.2em;
   margin-top: -2.2em;
-  display: block;
+  background: transparent;  
 }
-
+a#about:hover {
+  background: transparent;
+}
 img.benchmark_graph {
   float: right;
 }
