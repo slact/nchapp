@@ -11,7 +11,8 @@ domready(function() {
     "#subscribe-and-unsubscribe-callbacks": "#subscriber-presence",
     "#subsribe-and-unsubscribe-callbacks":  "#subscriber-presence",
     "#message-publishing-callbacks":        "#message-forwarding",
-    "#using-redis":                         "#redis"
+    "#using-redis":                         "#redis",
+    "#authenticate-and-hide-the-channel-id-with-x-accel-redirect" : "x-accel-redirect"
   };
   
   var check = function() {
