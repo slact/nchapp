@@ -17,13 +17,20 @@ var menuToggler = function(what) {
 
 function insertTableOfContents(tocElSelectors, pageElSelector) {
   
-  var els = document.querySelector(pageElSelector).querySelectorAll("h1, h2, h3, h4, h5");
+  var els = document.querySelector(pageElSelector).querySelectorAll("h1, h2, h3, h4, h5, #configuration-directives + ul a.directive");
 
   class Heading {
     constructor(el) {
       if(el) {
         this.tag = el.tagName;
-        this.tagLvl = parseInt(el.tagName[1]);
+        console.log(this.tag)
+        if(this.tag.toLowerCase()=="a") {
+          this.tagLvl=4
+        }
+        else {
+          this.tagLvl = parseInt(el.tagName[1]);
+        }
+        
         this.id = el.id;
         this.text = el.textContent;
       }
