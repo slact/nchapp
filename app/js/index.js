@@ -23,7 +23,6 @@ function insertTableOfContents(tocElSelectors, pageElSelector) {
     constructor(el) {
       if(el) {
         this.tag = el.tagName;
-        console.log(this.tag)
         if(this.tag.toLowerCase()=="a") {
           this.tagLvl=4
         }
