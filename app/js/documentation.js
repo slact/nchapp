@@ -12,7 +12,8 @@ domready(function() {
     "#subsribe-and-unsubscribe-callbacks":  "#subscriber-presence",
     "#message-publishing-callbacks":        "#message-forwarding",
     "#using-redis":                         "#redis",
-    "#authenticate-and-hide-the-channel-id-with-x-accel-redirect" : "x-accel-redirect"
+    "#authenticate-and-hide-the-channel-id-with-x-accel-redirect" : "#x-accel-redirect",
+    "#authenticate-with-nchan_authorize_request": "#request-authorization"
   };
   
   var check = function() {
