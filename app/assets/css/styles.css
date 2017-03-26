@@ -784,7 +784,17 @@ div.beg img {
   position: fixed !important;
 }
 
+.supportLead {
+  font-size: 125%;
+}
 
+.supportContact {
+  font-size: 150%;
+  padding: 1em;
+  display: inline-block;
+  margin-left: 0.5em;
+  background: #ececec;
+}
 
 img.someone {
   border:1px solid #A4AFAE;
@@ -796,7 +806,7 @@ img.someone {
   max-width:30%;
 }
 
-.footer img.btc-QR {
+img.btc-QR {
   float: left;
   height: auto;
   max-width: 30%;

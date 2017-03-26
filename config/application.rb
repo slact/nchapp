@@ -29,6 +29,19 @@ module Nchapp
       "gitdir/nchan"
     end
     
+    attr_reader :page_title
+    def set_title(title)
+      @page_title=title
+    end
+    
+    [:footer, :contents].each do |pageElement|
+      attr_accessor "no_#{pageElement}"
+      define_method("no_#{pageElement}!") { send("no_#{pageElement}=", true) }
+    end
+    def show_announcements!
+      @show_announcements = true
+    end
+    
     #static resources
     use Rack::Static, root: 'app/assets/', urls: ['/js', '/css', '/img', '/icons', '/documents']
     

@@ -4,7 +4,7 @@
   %head
     %meta(charset="utf-8")
     %meta(name="keywords" content="nchan pub/sub pubsub server nginx websocket longpoll eventstream Server-Sent events pushmodule push module")
-    %meta(name="description" content="Nchan - flexible pubsub for the modern web")
+    %meta(name="title" content="Nchan - flexible pub/sub server for the modern web")
     %meta(name="viewport" content="width=device-width, initial-scale=1")
     %link(rel="icon" href="/icons/tiny.png" sizes="16x16" type="image/png")
     %link(rel="icon" href="/icons/small.png" sizes="32x32" type="image/png")
@@ -16,7 +16,7 @@
 
     %link(rel="image_src" href="/img/nchan_logo.png")
     
-    %title="Nchan - flexible pub/sub server for the modern web."
+    %title="Nchan #{@page_title ? "| #{@page_title}" : "- flexible pubsub for the modern web"}"
     %script(type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.js?features=Element.prototype.classList,Array.prototype.map,Array.prototype.forEach,Array.from,Element.prototype.classList,document.querySelector")
   
   %body
@@ -39,30 +39,18 @@
         %li
           %a(href="/#configuration-directives")="configure"
         %li
+          %a(href="/support")="support"
+        %li
           %a.github(href="https://github.com/slact/nchan")="github"
-    
-    %ul.announcement
-      %li.nginxconf
-        %a(href="/nginxconf2016")="Notes"
-        and
-        %a(href="https://www.youtube.com/watch?v=TVgQSmqWm60")="video"
-        for my talk at 
-        %a(href="https://www.nginx.com/nginxconf/")="Nginx conf 2016"
-        are
-        %a(href="/nginxconf2016")="available here"
-      %li.redisconf
-        %a(href="/redisconf2016")="Notes"
-        and 
-        %a(href="https://www.youtube.com/watch?v=J3gVCBctDaE")="video"
-        for my previous talk at
-        %a(href="http://redisconference.com/")="Redisconf 2016"
-        %a(href="/redisconf2016")="available here"
-    
+    - if @show_announcements
+      = render :announcements
     .pageLayout
       #page.page=yield
       #sidebarScrollReference
       .sidebar
-        .tableOfContents.tocBox
-      .footer=render "footer"
+        - unless @no_contents
+          .tableOfContents.tocBox
+      - unless @no_footer
+        .footer=render "footer"
     .closer
       %img(src="/icons/kopimi.png" alt="copy, but don't plagiarise")
