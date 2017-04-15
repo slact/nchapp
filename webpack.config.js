@@ -5,7 +5,7 @@ module.exports = {
     documentation: "./app/js/documentation.js"
   },
   output: {
-    path: "app/assets/js",
+    path: __dirname + "/app/assets/js",
     filename: "[name].js"
   },
   module:{
