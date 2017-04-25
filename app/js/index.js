@@ -1,5 +1,5 @@
 import m from "mithril";
-import NchanSubscriber from "nchan";
+//import NchanSubscriber from "nchan";
 import domready from "domready";
 import ScrollMonitor from "scrollmonitor";
 
@@ -159,6 +159,5 @@ domready(function() {
     toggleSticky()
     watcher.on('stateChange', toggleSticky)
   }
-  
 
 })

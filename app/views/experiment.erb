@@ -1,5 +1,18 @@
+<script type="text/javascript" src="/js/NchanSubscriber.js"></script>
 <script type="text/javascript">
-  
+  function newSub(path, id) {
+    var sub = new NchanSubscriber(path, {"shared": true});
+    sub.on("connect", function() { console.log(id + " connect")});
+    sub.on("disconnect", function() { console.log(id + " disconnect")});
+    sub.on("message", function(msg) { console.log(id + " msg", msg)});
+    sub.start();
+    if(!window.subs) {
+      window.subs = {};
+    }
+    window.subs[id]=sub;
+    return sub;
+    
+  }
 </script>
 
 <p>

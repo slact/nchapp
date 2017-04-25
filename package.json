@@ -9,7 +9,6 @@
     "domready":"*",
     "mithril":"^*",
     "modernizr":"*",
-    "nchan":"*",
     "scrollmonitor":"*"  
   },
   
