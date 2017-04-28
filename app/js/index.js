@@ -160,5 +160,5 @@ domready(function() {
     watcher.on('stateChange', toggleSticky)
   }
   
-
+  //window.NchanSubscriber = NchanSubscriber; // just for testing
 })
