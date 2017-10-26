@@ -787,6 +787,28 @@ div.beg img {
 .supportLead {
   font-size: 125%;
 }
+ul.sponsors .company {
+  display: block;
+}
+
+ul.sponsors img {
+  display: block;
+}
+ul.sponsors li {
+  padding-bottom: 2em;
+  margin: 0.1em;
+  list-style: none;
+}
+ul.sponsors .respawn img {
+  background: #333;
+  padding: 2px;
+}
+ul.sponsors .description {
+  display: block;
+  padding-left: 1em;
+}
+
+
 
 .supportContact {
   font-size: 150%;
