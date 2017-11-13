@@ -787,28 +787,40 @@ div.beg img {
 .supportLead {
   font-size: 125%;
 }
-ul.sponsors .company {
-  display: block;
+.sponsors .company {
+  /*display: block;
+  margin: auto;*/
+}
+.sponsors td.logo a {
+  display: inline;
 }
 
-ul.sponsors img {
-  display: block;
+table.sponsors tr:hover {
+  background-color: #EFE;
 }
-ul.sponsors li {
+
+.sponsors td.logo {
+  vertical-align: top;
+  text-align: right;
+}
+
+.sponsors tr {
   padding-bottom: 2em;
   margin: 0.1em;
   list-style: none;
 }
-ul.sponsors .respawn img {
+.sponsors img.dark {
   background: #333;
   padding: 2px;
 }
-ul.sponsors .description {
+.sponsors .description {
   display: block;
   padding-left: 1em;
 }
 
-
+table.sponsors td.logo img {
+  max-width: 100%;
+}
 
 .supportContact {
   font-size: 150%;

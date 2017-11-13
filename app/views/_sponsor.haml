@@ -1,0 +1,14 @@
+%tr(class=tag)
+  %td.logo
+    - unless defined?(noimg) && noimg
+      - if defined? url
+        %a.company(href=url)
+          %img{src: "/img/sponsors/#{tag}.png", alt: name,  class: (defined?(imgclass) ? imgclass : "")}
+      -else
+        %img{src: "/img/sponsors/#{tag}.png", alt: name,  class: (defined?(imgclass) ? imgclass : "")}
+  %td
+    - if defined? url
+      %a.company(href=url)=name
+    - else
+      .company=name
+    .description=info
