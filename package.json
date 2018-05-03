@@ -27,6 +27,7 @@
     "less-loader": "*",
     "style-loader": "*",
     "webpack-dev-server": "*",
-    "webpack": "*"
+    "webpack": "*",
+    "webpack-cli":"*"
   }
 }
