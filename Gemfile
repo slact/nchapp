@@ -11,6 +11,8 @@ gem 'scrypt'
 gem 'redcarpet'
 gem 'pygments.rb'
 
+gem "process_exists"
+
 gem 'git'
 gem 'fpm', :git => "https://github.com/slact/fpm.git"
 

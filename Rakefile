@@ -36,21 +36,21 @@ task :console do
   pry
 end
 
-namespace :webpack do
+namespace :parcel do
 
-  desc "npm install webpack and friends. Assumes package.js and webpack.conf.js already exist."
+  desc "npm install parcel and friends. Assumes package.js and such already exist."
   task :install do |task|
     `npm install`
   end
 
   desc "watch for changes in dev mode"
   task :dev do |task|
-    system 'node node_modules/.bin/webpack --watch --debug'
+    system 'parcel --watch --debug'
   end
 
   desc "build assets for production use"
   task :release do |task|
-    system 'node node_modules/.bin/webpack -p'
+    system 'parcel build --log-level 3 --detailed-report --public-url /js/ -d app/assets/js/ app/js/*'
   end
 end
 
