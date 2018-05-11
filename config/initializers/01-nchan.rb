@@ -3,6 +3,7 @@ require "git"
 root_dir = Dir.pwd
 #generate readme
 unless system "gitdir/nchan/dev/redocument.rb --path gitdir/nchan/ --nchapp --output #{root_dir}/app/views/README.md"
+  puts "gitdir is empty!"
   exit 1
 end
 
