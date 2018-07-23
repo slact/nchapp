@@ -1,32 +1,24 @@
 {
   "name": "nchapp",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "license": "private",
-  
-  "dependencies": {
-    "domready":"*",
-    "mithril":"^*",
-    "modernizr":"*",
-    "nchan":"*",
-    "scrollmonitor":"*"  
+  "description": "Nchan documentation",
+  "author": "slact",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slact/nchapp.git"
   },
-  
+  "dependencies": {
+    "domready": "*",
+    "mithril": "^1.1.6",
+    "modernizr": "^3.6.0",
+    "nchan": "^1.0.9",
+    "scrollmonitor": "^1.2.4"
+  },
   "devDependencies": {
-    "babel-core": "*",
-    "babel-loader": "*",
+    "babel-core": "^6.26.3",
     "babel-preset-latest": "*",
     "babel-preset-stage-0": "*",
-    "bundle-loader": "*",
-    "modernizr-loader":"*",
-    "css-loader": "*",
-    "file-loader": "*",
-    "url-loader": "*",
-    "less": "*",
-    "less-loader": "*",
-    "style-loader": "*",
-    "webpack-dev-server": "*",
-    "webpack": "*"
+    "less": "^3.0.2"
   }
 }
