@@ -1,4 +1,3 @@
-require "pry"
 class Nchapp::AuthController < Nchapp::Application
   def warden
     env['warden']
