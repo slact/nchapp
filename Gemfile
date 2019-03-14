@@ -30,6 +30,8 @@ gem 'haml'
 gem 'racksh'
 gem 'redis-rack'
 
+gem "irb"
+
 #rack reloader
 gem "mr-sparkle"
 
