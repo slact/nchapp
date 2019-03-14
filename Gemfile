@@ -44,6 +44,7 @@ gem 'i18n'
 gem "halfling"
 
 group :development do
+  gem "irb"
   gem "pry"
   gem "pry-coolline"
   gem "pry-doc"
