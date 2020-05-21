@@ -13,6 +13,7 @@
     "mithril": "^1.1.6",
     "modernizr": "^3.6.0",
     "nchan": "^1.0.9",
+    "parcel": "^1.12.4",
     "scrollmonitor": "^1.2.4"
   },
   "devDependencies": {

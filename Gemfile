@@ -6,8 +6,6 @@ gem 'roda'
 gem 'syro'
 gem 'unicorn'
 
-gem 'scrypt'
-
 gem 'redcarpet'
 gem 'pygments.rb'
 
@@ -29,8 +27,6 @@ gem 'rack-detect-tor'
 gem 'haml'
 gem 'racksh'
 gem 'redis-rack'
-
-gem "irb"
 
 #rack reloader
 gem "mr-sparkle"
@@ -55,10 +51,10 @@ group :development do
   gem "pry-git"
   gem "pry-theme"
   gem 'pry-debundle'
-  gem "pry-byebug", "~> 1.3.3"
+  gem "pry-byebug"
   
   #gem 'awesome_print'
-  gem 'better_errors', git: 'https://github.com/grekko/better_errors.git'
+  gem 'better_errors'
   gem 'binding_of_caller'
   gem 'rake'
 end
