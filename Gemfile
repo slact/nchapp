@@ -40,6 +40,7 @@ gem 'queris', git: "https://github.com/slact/queris.git"
 
 gem 'i18n'
 gem "halfling"
+gem "erubis"
 
 group :development do
   gem "irb"
