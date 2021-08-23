@@ -45,13 +45,13 @@ gem "erubis"
 group :development do
   gem "irb"
   gem "pry"
-  gem "pry-coolline"
+  #gem "pry-coolline"
   gem "pry-doc"
-  gem "pry-remote"
+  #gem "pry-remote"
   #gem "pry-rescue"
   gem "pry-git"
   gem "pry-theme"
-  gem 'pry-debundle'
+  #gem 'pry-debundle'
   gem "pry-byebug"
   
   #gem 'awesome_print'
