@@ -50,7 +50,7 @@ namespace :parcel do
 
   desc "build assets for production use"
   task :release do |task|
-    system 'parcel build --log-level verbose --detailed-report --public-url /js/ --dist-dir app/assets/js/ app/js/*'
+    system 'npx parcel build --log-level verbose --detailed-report --public-url /js/ --dist-dir app/assets/js/ app/js/*'
   end
 end
 
