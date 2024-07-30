@@ -1,8 +1,5 @@
 require 'tilt/haml'
-require 'tilt/erubis'
 require "haml"
-
-Haml::Options.defaults[:ugly] = true
 
 #text files
 module Tilt    

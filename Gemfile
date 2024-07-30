@@ -33,15 +33,17 @@ gem "mr-sparkle"
 
 gem "redd"
 
-gem 'hiredis'
-gem 'redis', :require => ["redis/connection/hiredis", "redis"]
+gem 'hiredis-client', :require => ["hiredis-client"]
+gem 'redis', :require => ["redis"]
 
-gem 'queris', git: "https://github.com/slact/queris.git"
+gem 'queris', path: "/home/leop/sandbox/queris" #git: "https://github.com/slact/queris.git"
 
 gem 'i18n'
-gem "halfling"
+gem "halfling", path: "/home/leop/sandbox/halfling"
 gem "erubis"
 gem 'rake'
+gem "rexml"
+gem 'better_errors'
 
 group :development do
   gem "irb"
@@ -56,7 +58,6 @@ group :development do
   gem "pry-byebug"
   
   #gem 'awesome_print'
-  gem 'better_errors'
   gem 'binding_of_caller'
 end
 

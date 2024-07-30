@@ -2,3 +2,4 @@ node_modules
 app/assets/js/*.js*
 app/assets/js/*.map
 .cache
+.parcel-cache
