@@ -1,4 +1,5 @@
 require 'tilt/haml'
+require 'tilt/erubis'
 require "haml"
 
 #text files

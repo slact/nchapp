@@ -25,7 +25,6 @@
     .header
       %img.logo(src='/img/nchan_logo.png' alt="Nchan logo")
       %a.logo-overlay(href='/')
-      %img.http2(src='/img/http2-ready.png' alt='http/2 ready')
       .nginx
         %a(href="http://nginx.org")
           %img.nginx(src='/img/powered_by_nginx.png' alt="Powered by nginx")
@@ -43,14 +42,16 @@
         %li
           %a.github(href="https://github.com/slact/nchan")="github"
     - if @show_announcements
-      = render :announcements
+      != render :announcements
     .pageLayout
-      #page.page=yield
+      #page.page
+        != yield
       #sidebarScrollReference
       .sidebar
         - unless @no_contents
           .tableOfContents.tocBox
       - unless @no_footer
-        .footer=render "footer"
+        .footer
+          != render "footer"
     .closer
       %img(src="/icons/kopimi.png" alt="copy, but don't plagiarise")

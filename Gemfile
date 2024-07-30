@@ -36,10 +36,10 @@ gem "redd"
 gem 'hiredis-client', :require => ["hiredis-client"]
 gem 'redis', :require => ["redis"]
 
-gem 'queris', path: "/home/leop/sandbox/queris" #git: "https://github.com/slact/queris.git"
+gem 'queris', git: "https://github.com/slact/queris.git"
 
 gem 'i18n'
-gem "halfling", path: "/home/leop/sandbox/halfling"
+gem "halfling", git: "https://github.com/slact/halfling.git"
 gem "erubis"
 gem 'rake'
 gem "rexml"

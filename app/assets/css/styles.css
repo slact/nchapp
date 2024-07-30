@@ -145,7 +145,7 @@ ul.announcement li {
 .header div.nginx {
   position: absolute;
   z-index: 2;
-  top:110px;
+  top:5px;
   right: 5px;
 }
 
@@ -154,6 +154,7 @@ ul.announcement li {
   z-index: 2;
   top: 3px; 
   right: 3px;
+  display: none;
 }
 
 .header ul.navigation {

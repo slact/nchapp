@@ -58,11 +58,11 @@
   Here are some of the sponsors that have made the development and continual support of Nchan possible:
 
 %table.sponsors
-  = render "_sponsor", {tag: "respawn", name: "Respawn Entertainment", url: "http://respawn.com", info: "Redis bugfixes, long-polling multipart response support, long-polling bugfixes", imgclass: "dark"}
-  = render "_sponsor", {tag: "ring", name: "Ring", url: "https://ring.com", info: "Redis cluster & other bugfixes"}
-  = render "_sponsor", {tag: "hyfn", name: "HYFN", url: "https://hyfn.com", info: "Websocket permessage-deflate support"}
-  = render "_sponsor", {tag: "symless", name: "Symless", url: "https://symless.com", info: "Upstream authorization failure response proxying", imgclass: "dark"}  
-  = render "_sponsor", {tag: "anonymous", noimg: true, name: "Anonymous sponsors", info: "Various features and bugfixes"}
+  != render "_sponsor", {tag: "respawn", name: "Respawn Entertainment", url: "http://respawn.com", info: "Redis bugfixes, long-polling multipart response support, long-polling bugfixes", imgclass: "dark"}
+  != render "_sponsor", {tag: "ring", name: "Ring", url: "https://ring.com", info: "Redis cluster & other bugfixes"}
+  != render "_sponsor", {tag: "hyfn", name: "HYFN", url: "https://hyfn.com", info: "Websocket permessage-deflate support"}
+  != render "_sponsor", {tag: "symless", name: "Symless", url: "https://symless.com", info: "Upstream authorization failure response proxying", imgclass: "dark"}  
+  != render "_sponsor", {tag: "anonymous", noimg: true, name: "Anonymous sponsors", info: "Various features and bugfixes"}
   
 %h2#contribute="Contribute"
-= render "donate"
+!= render "donate"
