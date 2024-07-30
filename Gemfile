@@ -41,6 +41,7 @@ gem 'queris', git: "https://github.com/slact/queris.git"
 gem 'i18n'
 gem "halfling"
 gem "erubis"
+gem 'rake'
 
 group :development do
   gem "irb"
@@ -57,7 +58,6 @@ group :development do
   #gem 'awesome_print'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'rake'
 end
 
 group :test do
