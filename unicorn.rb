@@ -20,7 +20,7 @@ worker_processes 20
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
 listen "/tmp/nchapp_unicorn.sock", :backlog => 64
-listen 9293, :tcp_nopush => true
+#listen 9293, :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
 timeout 30
