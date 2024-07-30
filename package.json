@@ -11,15 +11,15 @@
   "dependencies": {
     "domready": "*",
     "mithril": "^1.1.6",
-    "modernizr": "^3.6.0",
+    "modernizr": "^3.13.0",
     "nchan": "^1.0.9",
-    "parcel": "^1.12.4",
-    "scrollmonitor": "^1.2.4"
+    "parcel": "^2.12.0",
+    "scrollmonitor": "^1.2.11"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "babel-core": "*",
     "babel-preset-latest": "*",
     "babel-preset-stage-0": "*",
-    "less": "^3.0.2"
+    "less": "*"
   }
 }
